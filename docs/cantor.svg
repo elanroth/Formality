@@ -1,0 +1,263 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1318" viewBox="0 0 1600 1318" role="img" aria-label="Diagonal.cantor proof-term tree">
+<title>Diagonal.cantor</title><desc>Typed expression tree. Compact mode groups applications and omits type/data arguments. Not a complete typing or conversion derivation. </desc>
+<metadata>{&quot;axioms&quot;:[],&quot;contract&quot;:{&quot;environmentSha256&quot;:&quot;1a77db25152e38533b13d915a52f53967f606ee020e7ee2b1b5ce1283ffb0477&quot;,&quot;input&quot;:{&quot;declaration&quot;:&quot;Diagonal.cantor&quot;,&quot;modules&quot;:[],&quot;sourceSha256&quot;:&quot;62bb4e814c0d6b1cd28f18e9ec1570980efd702f13f91076d3eac2753db66254&quot;},&quot;options&quot;:{&quot;expand&quot;:[&quot;Diagonal.selfContradiction&quot;],&quot;expandDepth&quot;:0,&quot;leanOptions&quot;:{&quot;maxHeartbeats&quot;:8000000,&quot;maxRecDepth&quot;:2048},&quot;maxDepth&quot;:300,&quot;maxNodes&quot;:20000,&quot;mode&quot;:&quot;raw&quot;,&quot;normalize&quot;:false,&quot;specialize&quot;:[],&quot;timeoutSeconds&quot;:180},&quot;recipeSha256&quot;:&quot;d0dd37a9a4b2848668be43dcf7d239e11c90576b6194cd30f497a7c533c8e961&quot;,&quot;schema&quot;:&quot;lean-proof-tree/contract/v1&quot;,&quot;tool&quot;:{&quot;files&quot;:{&quot;api.py&quot;:&quot;e5aa5dc8955cce38117f4c39401fbc06f1ade226595545b5fedc01cafa9a0c44&quot;,&quot;contract.py&quot;:&quot;02be03ab0f7ce39aa33685b1a4c448def933c11650bc4d0acb62523f14a33bb4&quot;,&quot;lean/Exporter.lean&quot;:&quot;0c02032d78cd326cee6f4aeb61334886995393cd24723e54fc849dbf4cde8aac&quot;,&quot;render.mjs&quot;:&quot;f65d9b0995272b5717f04ce6a16d2932f47739e8df46141823c6fd7869fdf896&quot;,&quot;web/layout.mjs&quot;:&quot;1048096956105f28791ff9ae5be7cade8784ba5f0ff81bb292e6f6ca01e805b1&quot;},&quot;sha256&quot;:&quot;1865b587d541253f8a7d304835920a7d6347938c16784d08b9175252e7b3735e&quot;,&quot;version&quot;:&quot;0.3.0&quot;},&quot;treeSha256&quot;:&quot;2b2ef386d770501095e1819a1e07ae22d450abcc5c2aca3868391525d07e2fd3&quot;,&quot;treeSpecification&quot;:&quot;lean-expr/raw/v1&quot;},&quot;drawing&quot;:{},&quot;semantics&quot;:&quot;Typed expression tree. Compact mode groups applications and omits type/data arguments. Not a complete typing or conversion derivation.&quot;,&quot;truncated&quot;:false}</metadata>
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="35" font-family="system-ui,sans-serif" font-size="22" fill="#242a32">Diagonal.cantor</text>
+<text x="30" y="70" font-family="ui-monospace,monospace" font-size="18" fill="#525d6b">∀ (α : Type u) (f : α → α → Prop), ¬∀ (p : α → Prop), ∃ a, f a = p</text>
+<g transform="translate(0 105)" fill="none" stroke-linecap="round" stroke-width="1.5">
+<path d="M708.56 1058.00H891.44" stroke="#8055b6"><title>Π introduction · α</title></path>
+<path d="M31.49 30.00H40.93" stroke="#adb5bf"><title>Type / data · </title></path>
+<path d="M675.33 1003.89H926.73" stroke="#8055b6"><title>Π introduction · f</title></path>
+<path d="M116.65 138.21H142.35" stroke="#adb5bf"><title>Type / data · a._@._internal._hyg.0</title></path>
+<path d="M43.91 30.00H53.35" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M92.19 84.11H110.20" stroke="#adb5bf"><title>Type / data · a._@._internal._hyg.0</title></path>
+<path d="M56.33 30.00H65.77" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M68.75 30.00H78.19" stroke="#adb5bf"><title>Type / data · </title></path>
+<path d="M648.54 949.79H962.03" stroke="#8055b6"><title>Π introduction · onto</title></path>
+<path d="M318.62 408.74H400.13" stroke="#adb5bf"><title>Type / data · p</title></path>
+<path d="M115.88 84.11H133.89" stroke="#adb5bf"><title>Type / data · a._@._internal._hyg.0</title></path>
+<path d="M81.17 30.00H90.61" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M93.59 30.00H103.03" stroke="#adb5bf"><title>Type / data · </title></path>
+<path d="M303.56 354.63H372.72" stroke="#2874c3"><title>Application · </title></path>
+<path d="M139.57 84.11H157.57" stroke="#2874c3"><title>Application · </title></path>
+<path d="M106.01 30.00H115.45" stroke="#627080"><title>Definition / constant · Exists</title></path>
+<path d="M118.43 30.00H127.86" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M290.81 300.53H345.32" stroke="#8055b6"><title>Π introduction · a</title></path>
+<path d="M130.85 30.00H140.28" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M270.24 246.42H317.91" stroke="#2874c3"><title>Application · </title></path>
+<path d="M239.65 192.32H280.29" stroke="#2874c3"><title>Application · </title></path>
+<path d="M206.80 138.21H232.50" stroke="#2874c3"><title>Application · </title></path>
+<path d="M143.26 30.00H152.70" stroke="#627080"><title>Definition / constant · Eq</title></path>
+<path d="M186.95 84.11H204.95" stroke="#adb5bf"><title>Type / data · a._@._internal._hyg.0</title></path>
+<path d="M155.68 30.00H165.12" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M168.10 30.00H177.54" stroke="#adb5bf"><title>Type / data · </title></path>
+<path d="M210.64 84.11H228.64" stroke="#2874c3"><title>Application · </title></path>
+<path d="M180.52 30.00H189.96" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M192.94 30.00H202.38" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M205.36 30.00H214.80" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M650.92 895.68H997.32" stroke="#2874c3"><title>Application · </title></path>
+<path d="M490.93 571.05H702.36" stroke="#2874c3"><title>Application · </title></path>
+<path d="M464.27 516.95H650.49" stroke="#2874c3"><title>Application · </title></path>
+<path d="M410.94 408.74H509.24" stroke="#2874c3"><title>Application · </title></path>
+<path d="M246.17 84.11H264.17" stroke="#2874c3"><title>Application · </title></path>
+<path d="M217.78 30.00H227.22" stroke="#627080"><title>Definition / constant · Exists.casesOn</title></path>
+<path d="M230.20 30.00H239.64" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M402.21 354.63H489.31" stroke="#8055b6"><title>Π introduction · a</title></path>
+<path d="M242.62 30.00H252.06" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M386.24 300.53H469.38" stroke="#2874c3"><title>Application · </title></path>
+<path d="M335.89 192.32H376.53" stroke="#2874c3"><title>Application · </title></path>
+<path d="M308.22 138.21H333.92" stroke="#2874c3"><title>Application · </title></path>
+<path d="M255.04 30.00H264.48" stroke="#627080"><title>Definition / constant · Eq</title></path>
+<path d="M293.54 84.11H311.55" stroke="#adb5bf"><title>Type / data · a._@._internal._hyg.0</title></path>
+<path d="M267.46 30.00H276.90" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M279.88 30.00H289.32" stroke="#adb5bf"><title>Type / data · </title></path>
+<path d="M317.23 84.11H335.24" stroke="#2874c3"><title>Application · </title></path>
+<path d="M292.30 30.00H301.74" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M304.72 30.00H314.15" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M411.45 246.42H449.90" stroke="#8055b6"><title>Π introduction · x</title></path>
+<path d="M317.14 30.00H326.57" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M398.77 192.32H431.28" stroke="#2874c3"><title>Application · </title></path>
+<path d="M329.55 30.00H338.99" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M387.11 138.21H412.80" stroke="#2874c3"><title>Application · </title></path>
+<path d="M364.61 84.11H382.61" stroke="#2874c3"><title>Application · </title></path>
+<path d="M341.97 30.00H351.41" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M354.39 30.00H363.83" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M366.81 30.00H376.25" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M539.24 462.84H638.61" stroke="#8055b6"><title>Π introduction · x</title></path>
+<path d="M520.05 408.74H618.34" stroke="#2874c3"><title>Application · </title></path>
+<path d="M400.14 84.11H418.14" stroke="#2874c3"><title>Application · </title></path>
+<path d="M379.23 30.00H388.67" stroke="#627080"><title>Definition / constant · Exists</title></path>
+<path d="M391.65 30.00H401.09" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M518.80 354.63H605.89" stroke="#8055b6"><title>Π introduction · a</title></path>
+<path d="M404.07 30.00H413.51" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M510.31 300.53H593.44" stroke="#2874c3"><title>Application · </title></path>
+<path d="M474.91 192.32H515.55" stroke="#2874c3"><title>Application · </title></path>
+<path d="M454.72 138.21H480.41" stroke="#2874c3"><title>Application · </title></path>
+<path d="M416.49 30.00H425.93" stroke="#627080"><title>Definition / constant · Eq</title></path>
+<path d="M447.52 84.11H465.52" stroke="#adb5bf"><title>Type / data · a._@._internal._hyg.0</title></path>
+<path d="M428.91 30.00H438.35" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M441.33 30.00H450.77" stroke="#adb5bf"><title>Type / data · </title></path>
+<path d="M471.21 84.11H489.21" stroke="#2874c3"><title>Application · </title></path>
+<path d="M453.75 30.00H463.19" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M466.17 30.00H475.61" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M542.99 246.42H581.44" stroke="#8055b6"><title>Π introduction · x</title></path>
+<path d="M478.59 30.00H488.03" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M537.79 192.32H570.30" stroke="#2874c3"><title>Application · </title></path>
+<path d="M491.01 30.00H500.45" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M533.60 138.21H559.30" stroke="#2874c3"><title>Application · </title></path>
+<path d="M518.58 84.11H536.59" stroke="#2874c3"><title>Application · </title></path>
+<path d="M503.43 30.00H512.86" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M515.85 30.00H525.28" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M528.26 30.00H537.70" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M540.68 30.00H550.12" stroke="#627080"><title>Definition / constant · False</title></path>
+<path d="M615.28 300.53H660.25" stroke="#2874c3"><title>Application · </title></path>
+<path d="M553.10 30.00H562.54" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M613.82 246.42H652.27" stroke="#8055b6"><title>Π introduction · x</title></path>
+<path d="M565.52 30.00H574.96" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M612.65 192.32H645.15" stroke="#2874c3"><title>Application · </title></path>
+<path d="M577.94 30.00H587.38" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M612.48 138.21H638.18" stroke="#2874c3"><title>Application · </title></path>
+<path d="M601.49 84.11H619.50" stroke="#2874c3"><title>Application · </title></path>
+<path d="M590.36 30.00H599.80" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M602.78 30.00H612.22" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M615.20 30.00H624.64" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M749.37 841.58H1032.61" stroke="#8055b6"><title>Π introduction · a</title></path>
+<path d="M627.62 30.00H637.06" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M746.05 787.47H1067.90" stroke="#8055b6"><title>Π introduction · ha</title></path>
+<path d="M682.08 300.53H765.22" stroke="#2874c3"><title>Application · </title></path>
+<path d="M667.40 192.32H708.03" stroke="#2874c3"><title>Application · </title></path>
+<path d="M657.56 138.21H683.25" stroke="#2874c3"><title>Application · </title></path>
+<path d="M640.04 30.00H649.48" stroke="#627080"><title>Definition / constant · Eq</title></path>
+<path d="M660.71 84.11H678.72" stroke="#adb5bf"><title>Type / data · a._@._internal._hyg.0</title></path>
+<path d="M652.46 30.00H661.90" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M664.88 30.00H674.32" stroke="#adb5bf"><title>Type / data · </title></path>
+<path d="M684.40 84.11H702.40" stroke="#2874c3"><title>Application · </title></path>
+<path d="M677.30 30.00H686.74" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M689.72 30.00H699.15" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M725.12 246.42H763.57" stroke="#8055b6"><title>Π introduction · x</title></path>
+<path d="M702.14 30.00H711.57" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M730.28 192.32H762.79" stroke="#2874c3"><title>Application · </title></path>
+<path d="M714.55 30.00H723.99" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M736.44 138.21H762.14" stroke="#2874c3"><title>Application · </title></path>
+<path d="M731.78 84.11H749.78" stroke="#2874c3"><title>Application · </title></path>
+<path d="M726.97 30.00H736.41" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M739.39 30.00H748.83" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M751.81 30.00H761.25" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M788.36 733.37H1103.20" stroke="#19856d"><title>Let binding · hn</title></path>
+<path d="M787.00 679.26H967.47" stroke="#8055b6"><title>Π introduction · hp</title></path>
+<path d="M770.25 138.21H795.94" stroke="#2874c3"><title>Application · </title></path>
+<path d="M767.31 84.11H785.31" stroke="#2874c3"><title>Application · </title></path>
+<path d="M764.23 30.00H773.67" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M776.65 30.00H786.09" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M789.07 30.00H798.51" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M803.92 625.16H984.93" stroke="#2874c3"><title>Application · </title></path>
+<path d="M804.29 571.05H995.72" stroke="#2874c3"><title>Application · </title></path>
+<path d="M804.67 516.95H1005.37" stroke="#2874c3"><title>Application · </title></path>
+<path d="M806.52 246.42H874.43" stroke="#2874c3"><title>Application · </title></path>
+<path d="M805.13 192.32H837.64" stroke="#2874c3"><title>Application · </title></path>
+<path d="M801.49 30.00H810.93" stroke="#627080"><title>Lemma reference · Iff.mp</title></path>
+<path d="M815.33 138.21H841.02" stroke="#2874c3"><title>Application · </title></path>
+<path d="M814.69 84.11H832.69" stroke="#2874c3"><title>Application · </title></path>
+<path d="M813.91 30.00H823.35" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M826.33 30.00H835.77" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M838.75 30.00H848.19" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M847.91 192.32H880.42" stroke="#2874c3"><title>Application · </title></path>
+<path d="M851.17 30.00H860.61" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M860.40 138.21H886.09" stroke="#2874c3"><title>Application · </title></path>
+<path d="M862.06 84.11H880.07" stroke="#2874c3"><title>Application · </title></path>
+<path d="M863.59 30.00H873.03" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M876.01 30.00H885.45" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M888.43 30.00H897.86" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M867.58 462.84H1021.68" stroke="#2874c3"><title>Application · </title></path>
+<path d="M887.47 246.42H955.38" stroke="#2874c3"><title>Application · </title></path>
+<path d="M890.68 192.32H923.19" stroke="#2874c3"><title>Application · </title></path>
+<path d="M900.85 30.00H910.28" stroke="#627080"><title>Lemma reference · iff_of_eq</title></path>
+<path d="M905.48 138.21H931.17" stroke="#2874c3"><title>Application · </title></path>
+<path d="M909.44 84.11H927.44" stroke="#2874c3"><title>Application · </title></path>
+<path d="M913.26 30.00H922.70" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M925.68 30.00H935.12" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M938.10 30.00H947.54" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M933.46 192.32H965.97" stroke="#2874c3"><title>Application · </title></path>
+<path d="M950.52 30.00H959.96" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M950.55 138.21H976.25" stroke="#2874c3"><title>Application · </title></path>
+<path d="M956.82 84.11H974.82" stroke="#2874c3"><title>Application · </title></path>
+<path d="M962.94 30.00H972.38" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M975.36 30.00H984.80" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M987.78 30.00H997.22" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M939.69 408.74H1037.99" stroke="#2874c3"><title>Application · </title></path>
+<path d="M949.27 354.63H1045.33" stroke="#2874c3"><title>Application · </title></path>
+<path d="M958.84 300.53H1051.52" stroke="#2874c3"><title>Application · </title></path>
+<path d="M977.99 192.32H1028.37" stroke="#2874c3"><title>Application · </title></path>
+<path d="M985.71 138.21H1019.97" stroke="#2874c3"><title>Application · </title></path>
+<path d="M992.35 84.11H1010.35" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1000.20 30.00H1009.64" stroke="#627080"><title>Lemma reference · congrFun</title></path>
+<path d="M1012.62 30.00H1022.06" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1016.04 84.11H1034.04" stroke="#8055b6"><title>Π introduction · x</title></path>
+<path d="M1025.04 30.00H1034.48" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1037.46 30.00H1046.90" stroke="#adb5bf"><title>Type / data · </title></path>
+<path d="M1039.73 84.11H1057.73" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1049.88 30.00H1059.32" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1062.30 30.00H1071.74" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1028.68 246.42H1067.13" stroke="#8055b6"><title>Π introduction · x</title></path>
+<path d="M1074.72 30.00H1084.15" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1051.09 192.32H1083.60" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1087.14 30.00H1096.57" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M1074.51 138.21H1100.20" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1087.10 84.11H1105.11" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1099.55 30.00H1108.99" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1111.97 30.00H1121.41" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1124.39 30.00H1133.83" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1136.81 30.00H1146.25" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1149.23 30.00H1158.67" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1161.65 30.00H1171.09" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1174.07 30.00H1183.51" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M992.78 625.16H1173.78" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1186.49 30.00H1195.93" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1017.65 571.05H1209.07" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1036.42 516.95H1237.12" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1130.31 246.42H1198.22" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1147.33 192.32H1179.84" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1198.91 30.00H1208.35" stroke="#627080"><title>Lemma reference · Iff.mpr</title></path>
+<path d="M1175.93 138.21H1201.62" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1193.70 84.11H1211.70" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1211.33 30.00H1220.77" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1223.75 30.00H1233.19" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1236.17 30.00H1245.61" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1190.11 192.32H1222.62" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1248.59 30.00H1258.03" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M1221.01 138.21H1246.70" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1241.08 84.11H1259.08" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1261.01 30.00H1270.45" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1273.43 30.00H1282.86" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1285.85 30.00H1295.28" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1117.74 462.84H1271.84" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1211.26 246.42H1279.17" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1232.88 192.32H1265.39" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1298.26 30.00H1307.70" stroke="#627080"><title>Lemma reference · iff_of_eq</title></path>
+<path d="M1266.08 138.21H1291.78" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1288.45 84.11H1306.46" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1310.68 30.00H1320.12" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1323.10 30.00H1332.54" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1335.52 30.00H1344.96" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1275.66 192.32H1308.17" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1347.94 30.00H1357.38" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M1311.16 138.21H1336.85" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1335.83 84.11H1353.83" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1360.36 30.00H1369.80" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1372.78 30.00H1382.22" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1385.20 30.00H1394.64" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1208.26 408.74H1306.56" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1236.24 354.63H1332.31" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1264.23 300.53H1356.91" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1320.19 192.32H1370.57" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1346.32 138.21H1380.58" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1371.36 84.11H1389.36" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1397.62 30.00H1407.06" stroke="#627080"><title>Lemma reference · congrFun</title></path>
+<path d="M1410.04 30.00H1419.48" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1395.05 84.11H1413.05" stroke="#8055b6"><title>Π introduction · x</title></path>
+<path d="M1422.46 30.00H1431.90" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1434.88 30.00H1444.32" stroke="#adb5bf"><title>Type / data · </title></path>
+<path d="M1418.74 84.11H1436.74" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1447.30 30.00H1456.74" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1459.72 30.00H1469.15" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1352.47 246.42H1390.92" stroke="#8055b6"><title>Π introduction · x</title></path>
+<path d="M1472.14 30.00H1481.57" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1393.29 192.32H1425.80" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1484.55 30.00H1493.99" stroke="#627080"><title>Definition / constant · Not</title></path>
+<path d="M1435.12 138.21H1460.81" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1466.11 84.11H1484.12" stroke="#2874c3"><title>Application · </title></path>
+<path d="M1496.97 30.00H1506.41" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1509.39 30.00H1518.83" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1521.81 30.00H1531.25" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1534.23 30.00H1543.67" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1546.65 30.00H1556.09" stroke="#627080"><title>Hypothesis · </title></path>
+<path d="M1559.07 30.00H1568.51" stroke="#627080"><title>Hypothesis · </title></path>
+</g>
+<path d="M30 1223h18" stroke="#8055b6" stroke-width="2"/><text x="55" y="1228" font-family="system-ui,sans-serif" font-size="15" fill="#525d6b">Π introduction</text>
+<path d="M296.6666666666667 1223h18" stroke="#adb5bf" stroke-width="2"/><text x="321.6666666666667" y="1228" font-family="system-ui,sans-serif" font-size="15" fill="#525d6b">Type / data</text>
+<path d="M563.3333333333334 1223h18" stroke="#627080" stroke-width="2"/><text x="588.3333333333334" y="1228" font-family="system-ui,sans-serif" font-size="15" fill="#525d6b">Hypothesis</text>
+<path d="M830 1223h18" stroke="#2874c3" stroke-width="2"/><text x="855" y="1228" font-family="system-ui,sans-serif" font-size="15" fill="#525d6b">Application</text>
+<path d="M1096.6666666666667 1223h18" stroke="#627080" stroke-width="2"/><text x="1121.6666666666667" y="1228" font-family="system-ui,sans-serif" font-size="15" fill="#525d6b">Definition / constant</text>
+<path d="M1363.3333333333335 1223h18" stroke="#19856d" stroke-width="2"/><text x="1388.3333333333335" y="1228" font-family="system-ui,sans-serif" font-size="15" fill="#525d6b">Let binding</text>
+<path d="M30 1253h18" stroke="#627080" stroke-width="2"/><text x="55" y="1258" font-family="system-ui,sans-serif" font-size="15" fill="#525d6b">Lemma reference</text>
+<text x="30" y="1306" font-family="system-ui,sans-serif" font-size="14" fill="#68717d">raw expression tree · 247 nodes · leanprover/lean4:v4.35.0 · typing/conversion derivations omitted</text></svg>

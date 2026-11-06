@@ -1,0 +1,54 @@
+[
+  {
+    "id": "diagonal",
+    "title": "Cantor's diagonal theorem",
+    "description": "A direct diagonal argument. Expand Diagonal.selfContradiction to open its final contradiction.",
+    "file": "Diagonal.lean",
+    "request": {"declaration": "Diagonal.cantor", "mode": "raw", "modules": []}
+  },
+  {
+    "id": "induction",
+    "title": "Induction as a finite proof generator",
+    "description": "Specialize n, then normalize to compute the Nat recursor. P, base and step remain premises.",
+    "file": "Induction.lean",
+    "request": {"declaration": "Induction.iterate", "mode": "raw", "modules": []}
+  },
+  {
+    "id": "zero-add",
+    "title": "Zero plus n equals n",
+    "description": "A tactic proof by induction. The step uses a separately expandable equality lemma.",
+    "file": "Induction.lean",
+    "request": {"declaration": "Induction.zeroAdd", "mode": "raw", "modules": []}
+  },
+  {
+    "id": "soundness",
+    "title": "Hilbert calculus soundness",
+    "description": "An actual soundness theorem for the K/S implicational calculus, by induction on derivations.",
+    "file": "Soundness.lean",
+    "request": {"declaration": "Propositional.soundness", "mode": "raw", "modules": []}
+  },
+  {
+    "id": "lawvere",
+    "title": "Lawvere's fixed-point theorem (Types)",
+    "description": "Mathlib's diagonal fixed-point argument; the helper used by Cantor's theorem.",
+    "mathlibProject": true,
+    "request": {"declaration": "Function.exists_fixed_point_of_surjective", "mode": "raw", "modules": ["Mathlib.Logic.Function.Basic"]},
+    "sourceUrl": "https://github.com/leanprover-community/mathlib4/blob/389a421660f36801fe8278d8ab4275009b955a25/Mathlib/Logic/Function/Basic.lean"
+  },
+  {
+    "id": "mathlib-cantor",
+    "title": "Cantor's theorem (Mathlib)",
+    "description": "The imported Mathlib proof, via Lawvere's fixed-point argument. Try lemma expansion depth 1.",
+    "mathlibProject": true,
+    "request": {"declaration": "Function.cantor_surjective", "mode": "raw", "modules": ["Mathlib.Logic.Function.Basic"]},
+    "sourceUrl": "https://github.com/leanprover-community/mathlib4/blob/389a421660f36801fe8278d8ab4275009b955a25/Mathlib/Logic/Function/Basic.lean"
+  },
+  {
+    "id": "compactness",
+    "title": "First-order compactness (Mathlib)",
+    "description": "The genuine ultraproduct proof: a theory has a model iff every finite subtheory has a model. Larger expansions expose its supporting lemmas.",
+    "mathlibProject": true,
+    "request": {"declaration": "FirstOrder.Language.Theory.isSatisfiable_iff_isFinitelySatisfiable", "mode": "raw", "modules": ["Mathlib.ModelTheory.Satisfiability"]},
+    "sourceUrl": "https://github.com/leanprover-community/mathlib4/blob/389a421660f36801fe8278d8ab4275009b955a25/Mathlib/ModelTheory/Satisfiability.lean"
+  }
+]

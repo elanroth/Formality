@@ -1,0 +1,7 @@
+include LICENSE README.md SPEC.md CHANGELOG.md CONTRIBUTING.md lean-toolchain
+recursive-include lean *.lean
+recursive-include examples *.lean *.json
+recursive-include web *.html *.css *.mjs
+recursive-include tests *.py *.mjs *.cjs
+recursive-include docs *.svg *.md
+include render.mjs proof_tree.py

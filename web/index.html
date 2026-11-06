@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Formality</title><link rel="stylesheet" href="/style.css"></head>
+<body>
+<header class="topbar"><div class="brand">Formality<span>Lean → inference bars</span></div><div class="local">Local · your Lean environment</div></header>
+<main>
+  <aside class="controls" aria-label="Proof input and expansion settings">
+    <label>Start with an example<select id="examples"><option value="">Choose a proof…</option></select></label>
+    <p id="example-note" class="muted"></p>
+    <label>Lean project folder <span class="optional">optional</span><input id="project" placeholder="/path/to/your/lean-project" autocomplete="off"></label>
+    <label>Import modules <span class="optional">comma separated</span><input id="modules" placeholder="Mathlib.ModelTheory.Satisfiability" autocomplete="off"></label>
+    <div class="source-heading"><label for="source">Lean source</label><label class="file-label" for="source-file">Open .lean file<input type="file" id="source-file" accept=".lean,text/plain" hidden></label></div>
+    <textarea id="source" spellcheck="false" aria-label="Lean source code" placeholder="Paste a full Lean file with a named theorem, or import its module above."></textarea>
+    <label>Declaration<input id="declaration" placeholder="Namespace.theoremName" autocomplete="off" spellcheck="false"></label>
+    <div class="two-fields"><label>Tree detail<select id="mode"><option value="raw">Full expression</option><option value="compact">Compact proof</option></select></label><label>Lemma expansion<select id="expand-depth"><option value="0">Selected lemmas only</option><option value="1">1 level of lemmas</option><option value="2">2 levels of lemmas</option><option value="3">3 levels of lemmas</option><option value="4">4 levels of lemmas</option></select></label></div>
+    <details id="unfold-options" open><summary>Specialize & unfold induction</summary><div class="two-fields"><label>Nat binder<input id="binder" value="n" placeholder="n" list="nat-binders" autocomplete="off"><datalist id="nat-binders"></datalist></label><label>Value <span class="optional">blank = general</span><input id="numeral" type="number" min="0" max="10000" placeholder="e.g. 20"></label></div><label class="check"><input id="normalize" type="checkbox">Compute concrete recursors</label><p class="hint">Specializes the named parameter, then reduces the resulting proof. Symbolic recursors and opaque lemma calls may remain.</p></details>
+    <details><summary>Selected lemma expansions <span id="selected-count"></span></summary><label>Available declarations<select id="references"><option value="">Generate a tree to list references</option></select></label><button id="add-reference" type="button" class="secondary">Add selected lemma</button><div id="selected-lemmas"></div><button id="clear-expansions" type="button" class="text-button">Collapse all lemmas</button></details>
+    <details><summary>Limits</summary><div class="two-fields"><label>Node budget<input id="max-nodes" type="number" min="100" max="100000" value="20000"></label><label>Depth budget<input id="max-depth" type="number" min="10" max="500" value="300"></label></div></details>
+    <button id="generate" class="primary" type="button">Generate tree</button>
+    <p id="status" role="status" aria-live="polite">Choose an example or enter your proof.</p>
+    <pre id="error" role="alert" hidden></pre>
+  </aside>
+  <section class="workspace" aria-label="Proof tree viewer">
+    <div class="viewer-heading"><div><h1 id="title">Your proof, as a shape.</h1><p id="meta" class="muted">Premises above. One conclusion below.</p></div><div class="export-actions"><button id="export-svg" disabled>Save SVG</button><button id="export-png" disabled>Save PNG</button><button id="export-json" disabled>Save JSON</button><label class="file-label secondary" for="json-file">Open JSON<input type="file" id="json-file" accept=".json,application/json" hidden></label></div></div>
+    <pre id="statement" class="statement"></pre>
+    <p id="axiom-summary" class="muted"></p>
+    <div id="truncation" role="status" hidden>Partial tree: red dashed bars mark omitted subtrees. Increase the limits for a complete export.</div>
+    <div id="canvas-wrap"><canvas id="tree" aria-label="Inference bars, widening toward the premises and narrowing to the conclusion" role="img"></canvas><div id="empty">Paste a Lean proof.<br><span>See its structure.</span></div><div class="view-tools"><button id="fit" disabled>Fit</button><button id="zoom-out" disabled aria-label="Zoom out">−</button><button id="zoom-in" disabled aria-label="Zoom in">+</button><span id="zoom-label">100%</span></div></div>
+    <div id="legend" aria-label="Rule colors"></div>
+    <div class="display-options"><label>Line weight<input type="range" id="line-weight" min=".5" max="4" value="1.5" step=".25"></label><p class="muted">Scroll to zoom · drag to pan · click a bar to inspect</p></div>
+    <details id="inspector"><summary>Inspect a line</summary><div class="inspect-head"><label>Expression node<select id="inspect-node"></select></label><button id="expand-node" disabled>Expand this declaration</button></div><pre id="node-content">Select a bar in the tree.</pre></details>
+    <details id="provenance"><summary>Proof & export record</summary><div id="record"></div></details>
+    <p class="scope">Typed proof-term structure. Compact mode omits type/data arguments. Typing and conversion derivations are not drawn.</p>
+  </section>
+</main>
+<script type="module" src="/app.mjs"></script>
+</body></html>

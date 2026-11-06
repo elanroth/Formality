@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "formality-lean"
+version = "0.3.0"
+description = "Versioned, reproducible Lean proof-term trees and inference-bar figures"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Elan Roth"}]
+requires-python = ">=3.10"
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/elanroth/Formality"
+Issues = "https://github.com/elanroth/Formality/issues"
+
+[project.scripts]
+formality = "formality.api:main"
+lean-proof-tree = "formality.api:main"
+
+[tool.setuptools]
+packages = ["formality", "lean_proof_tree"]
+package-dir = {formality = ".", lean_proof_tree = "compat/lean_proof_tree"}
+include-package-data = false
+
+[tool.setuptools.package-data]
+formality = ["lean-toolchain", "lean/*.lean", "web/*.mjs", "web/*.css", "web/*.html", "examples/*.lean", "examples/catalog.json", "examples/*.profile.json", "render.mjs", "SPEC.md"]

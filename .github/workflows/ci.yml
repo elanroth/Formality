@@ -1,0 +1,43 @@
+name: CI
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.13']
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Install pinned Lean
+        shell: bash
+        run: |
+          curl -sSfL https://elan.lean-lang.org/elan-init.sh -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          "$HOME/.elan/bin/elan" toolchain install "$(cat lean-toolchain)"
+      - name: Python and real Lean tests
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Layout tests
+        run: node --test tests/layout.test.mjs
+      - name: Build and install wheel
+        run: |
+          python -m pip install build
+          python -m build
+          python -m pip install dist/*.whl
+      - name: Exercise installed API outside checkout
+        working-directory: ${{ runner.temp }}
+        env:
+          FORMALITY_RUNS: ${{ runner.temp }}/formality-runs
+        run: |
+          python "$GITHUB_WORKSPACE/tests/package_smoke.py" package-result.json
+          formality --help
