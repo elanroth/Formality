@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import subprocess
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 PROFILE_SCHEMA = "lean-proof-tree/profile/v1"
 LOCK_SCHEMA = "lean-proof-tree/lock/v1"
 SPEC = {"raw": "lean-expr/raw/v1", "compact": "lean-expr/compact/v1"}
@@ -100,7 +100,7 @@ def canonical_tree(tree):
 
 
 def attach_contract(tree, request, environment):
-    options = {key: request[key] for key in ["mode", "expand", "expandDepth", "maxNodes", "maxDepth",
+    options = {key: request[key] for key in ["mode", "expand", "expandDepth", "maxNodes", "maxDepth", "maxVisits",
                                            "normalize", "specialize"]}
     options["leanOptions"] = request["leanOptions"]
     options["timeoutSeconds"] = request["timeoutSeconds"]
@@ -169,7 +169,7 @@ def load_profile(path):
     _keys(inp, ["source", "sourceFile", "project", "modules", "declaration"], "input")
     _keys(environment, ["toolchain", "leanOptions"], "environment")
     _keys(transform, ["expand", "expandDepth", "specialize", "normalize"], "transform")
-    _keys(limits, ["maxNodes", "maxDepth", "timeoutSeconds"], "limits")
+    _keys(limits, ["maxNodes", "maxDepth", "maxVisits", "timeoutSeconds"], "limits")
     if not environment.get("toolchain"):
         raise ContractError("A profile must pin environment.toolchain explicitly.")
     if "source" in inp and "sourceFile" in inp:

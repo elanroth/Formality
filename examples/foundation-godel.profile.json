@@ -1,0 +1,35 @@
+{
+  "schema": "lean-proof-tree/profile/v1",
+  "treeSpecification": "lean-expr/compact/v1",
+  "input": {
+    "project": "../../Foundation",
+    "modules": [
+      "Foundation.FirstOrder.Incompleteness.First"
+    ],
+    "declaration": "FFL.FirstOrder.Arithmetic.incomplete"
+  },
+  "environment": {
+    "toolchain": "leanprover/lean4:v4.35.0",
+    "leanOptions": {
+      "maxRecDepth": 4096,
+      "maxHeartbeats": 40000000
+    }
+  },
+  "transform": {
+    "expand": [],
+    "expandDepth": 2,
+    "specialize": [],
+    "normalize": false
+  },
+  "limits": {
+    "maxNodes": 100000,
+    "maxDepth": 500,
+    "timeoutSeconds": 600,
+    "maxVisits": 5000000
+  },
+  "drawing": {
+    "profile": "inference-bars/v1",
+    "taper": 0.88,
+    "stroke": 2.5
+  }
+}

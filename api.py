@@ -50,7 +50,7 @@ def clean_request(request):
     if not isinstance(request, dict):
         raise ProofError("Expected a JSON object.")
     allowed = {"source", "project", "modules", "declaration", "mode", "expand", "expandDepth",
-               "maxNodes", "maxDepth", "normalize", "specialize", "toolchain", "leanOptions", "timeoutSeconds"}
+               "maxNodes", "maxDepth", "maxVisits", "normalize", "specialize", "toolchain", "leanOptions", "timeoutSeconds"}
     if set(request) - allowed:
         raise ProofError("Unknown extraction option(s): " + ", ".join(sorted(set(request)-allowed)))
     for field in ("source", "declaration", "project"):
@@ -110,6 +110,7 @@ def clean_request(request):
         "expandDepth": integer(request.get("expandDepth", 0), "Expansion depth", 0, 8),
         "maxNodes": integer(request.get("maxNodes", 20000), "Node budget", 100, 100000),
         "maxDepth": integer(request.get("maxDepth", 300), "Depth budget", 10, 500),
+        "maxVisits": integer(request.get("maxVisits", 500000), "Transformation budget", 100, 50000000),
         "normalize": request.get("normalize", False),
         "specialize": specialization,
     }
@@ -340,6 +341,7 @@ def main():
     render.add_argument("--normalize", action="store_true")
     render.add_argument("--max-nodes", type=int, default=20000)
     render.add_argument("--max-depth", type=int, default=300)
+    render.add_argument("--max-visits", type=int, default=500000)
     render.add_argument("--toolchain")
     render.add_argument("--lean-option", action="append", default=[], metavar="NAME=JSON_VALUE")
     render.add_argument("--timeout", type=int, default=180)
@@ -386,6 +388,7 @@ def main():
         "modules": args.module, "declaration": args.declaration, "mode": args.mode,
         "expand": args.expand, "expandDepth": args.expand_depth, "specialize": specialization,
         "normalize": args.normalize, "maxNodes": args.max_nodes, "maxDepth": args.max_depth,
+        "maxVisits": args.max_visits,
         "toolchain": args.toolchain, "leanOptions": lean_options, "timeoutSeconds": args.timeout,
     }
     try:

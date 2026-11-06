@@ -97,7 +97,7 @@ print(tree["contract"]["treeSha256"])
 ```
 
 Other CLI options include `--project`, repeated `--module` and `--expand`,
-`--expand-depth`, `--max-nodes`, `--max-depth`, `--lean-option pp.universes=true`,
+`--expand-depth`, `--max-nodes`, `--max-depth`, `--max-visits`, `--lean-option pp.universes=true`,
 and `--timeout`. Run `formality render --help` for details.
 
 ## Reproduce a tree
@@ -183,10 +183,12 @@ Those sizes describe that specific export, not the whole mathematical argument
 with every dependency expanded. Its reported axioms were `propext`,
 `Classical.choice`, and `Quot.sound`.
 
-Gödel incompleteness is a future large-image target. The
-[FormalizedFormalLogic/Foundation](https://github.com/FormalizedFormalLogic/Foundation)
-project is a candidate source. Formality has **not** yet imported or rendered its
-incompleteness proofs.
+**Gödel's first incompleteness theorem has now been rendered from
+[Foundation](https://github.com/FormalizedFormalLogic/Foundation).** The actual
+`FFL.FirstOrder.Arithmetic.incomplete` proof produces complete compact trees of
+467, 2,646, and 19,979 nodes at lemma-expansion depths 0, 1, and 2. Depth 3
+reaches the 100,000-node display cap and is explicitly marked truncated.
+See [the image, pinned source, hypotheses, and reproduction instructions](docs/GODEL.md).
 
 ## Development
 

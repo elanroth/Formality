@@ -37,3 +37,12 @@ and the pinned Lean toolchain, followed by wheel installation and API use
 outside the checkout. This is finite implementation evidence, not a theorem
 about all Lean programs or proof-tree correctness. The browser check is local;
 it is not part of the hosted CI job.
+
+## 0.4.0 expansion update
+
+The updated suite passed 60 Python tests plus four Node layout tests. New cases
+cover repeated-proof expansion history, structural binder names, open local contexts,
+and transformation-budget validation. The updated wheel was installed separately;
+its API and browser controls are checked independently. The actual Foundation
+incompleteness run is documented in [GODEL.md](GODEL.md); that external dependency
+benchmark is not part of the lightweight CI suite.

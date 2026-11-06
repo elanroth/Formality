@@ -2,17 +2,17 @@ import {layoutProof,svgDocument,defaultPalette,ruleLabels} from './layout.mjs';
 const $=id=>document.getElementById(id);
 const canvas=$('tree'),ctx=canvas.getContext('2d');
 const state={tree:null,layout:null,selected:null,expanded:new Set(),palette:{...defaultPalette},stroke:1.5,camera:{scale:1,x:0,y:0},token:null,catalog:[],busy:false,pointer:null};
-const fields=['project','modules','source','declaration','mode','expand-depth','binder','numeral','normalize','max-nodes','max-depth'];
+const fields=['project','modules','source','declaration','mode','expand-depth','binder','numeral','normalize','max-nodes','max-depth','max-visits','timeout'];
 function message(text){$('status').textContent=text;}
 function dirty(){if(!state.busy&&state.tree)message('Settings changed · Generate tree to apply.');}
 fields.forEach(id=>$(id).addEventListener('input',dirty));
 function readRequest(){
   const specialization=$('numeral').value.trim()===''?[]:[[$('binder').value.trim(),Number($('numeral').value)]];
-  return{project:$('project').value.trim(),modules:$('modules').value.split(/[,\s]+/).filter(Boolean),source:$('source').value,declaration:$('declaration').value.trim(),mode:$('mode').value,expandDepth:Number($('expand-depth').value),expand:[...state.expanded],specialize:specialization,normalize:$('normalize').checked,maxNodes:Number($('max-nodes').value),maxDepth:Number($('max-depth').value)};
+  return{project:$('project').value.trim(),modules:$('modules').value.split(/[,\s]+/).filter(Boolean),source:$('source').value,declaration:$('declaration').value.trim(),mode:$('mode').value,expandDepth:Number($('expand-depth').value),expand:[...state.expanded],specialize:specialization,normalize:$('normalize').checked,maxNodes:Number($('max-nodes').value),maxDepth:Number($('max-depth').value),maxVisits:Number($('max-visits').value),timeoutSeconds:Number($('timeout').value)};
 }
 function fillRequest(r){
   $('project').value=r.project||'';$('source').value=r.source||'';$('modules').value=(r.modules||[]).join(', ');$('declaration').value=r.declaration||'';
-  $('mode').value=r.mode||'raw';$('expand-depth').value=r.expandDepth||0;$('normalize').checked=!!r.normalize;$('max-nodes').value=r.maxNodes||20000;$('max-depth').value=r.maxDepth||300;
+  $('mode').value=r.mode||'raw';$('expand-depth').value=r.expandDepth||0;$('normalize').checked=!!r.normalize;$('max-nodes').value=r.maxNodes||20000;$('max-depth').value=r.maxDepth||300;$('max-visits').value=r.maxVisits||500000;$('timeout').value=r.timeoutSeconds||180;
   $('binder').value=r.specialize?.[0]?.[0]||'n';$('numeral').value=r.specialize?.[0]?.[1]??'';
   state.expanded=new Set(r.expand||[]);showExpansions();
 }

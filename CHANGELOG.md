@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 — 2026-11-06
+
+- Memoize lemma expansion by structural expression, dependency depth, and active
+  expansion stack, while preserving binder names and per-occurrence expansion history.
+- Expose the transformation work budget through `maxVisits`, profile limits, and
+  `--max-visits`, retaining the default of 500,000 uncached visits.
+- Render Foundation's actual first incompleteness theorem at expansion depths 0–3
+  (depth 3 explicitly reaches the display cap);
+  include a pinned reproduction profile, image, and provenance documentation.
+- Add regression coverage for repeated closed proofs, distinct binder names,
+  open local contexts, and budget validation.
+
 ## 0.3.0 — 2026-11-06
 
 First public release as **Formality**, under the MIT license.

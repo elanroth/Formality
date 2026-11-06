@@ -3,5 +3,5 @@ recursive-include lean *.lean
 recursive-include examples *.lean *.json
 recursive-include web *.html *.css *.mjs
 recursive-include tests *.py *.mjs *.cjs
-recursive-include docs *.svg *.md
+recursive-include docs *.svg *.png *.md
 include render.mjs proof_tree.py

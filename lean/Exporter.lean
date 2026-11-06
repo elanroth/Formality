@@ -13,12 +13,15 @@ structure Config where
   expandDepth : Nat := 0
   maxNodes : Nat := 20000
   maxDepth : Nat := 300
+  maxVisits : Nat := 500000
   normalize : Bool := false
   specialize : Array (String × Nat) := #[]
   deriving FromJson
 
 structure Work where
   visited : Nat := 0
+  -- Structural equality preserves binder names/annotations in the exported tree.
+  expansionCache : Std.HashMap (ExprStructEq × Nat × Array Name) (Expr × Array String) := {}
   expansions : Array String := #[]
   applied : Array String := #[]
   nodes : Array Json := #[]
@@ -28,10 +31,10 @@ structure Work where
 
 abbrev M := StateRefT Work MetaM
 
-def tick : M Unit := do
+def tick (limit : Nat) : M Unit := do
   modify fun s => {s with visited := s.visited + 1}
-  if (← get).visited > 500000 then
-    throwError "Transformation budget exceeded (500000 visits); reduce lemma expansion."
+  if (← get).visited > limit then
+    throwError "Transformation budget exceeded ({limit} uncached visits); reduce lemma expansion or increase maxVisits."
 
 def shortPP (e : Expr) : MetaM String :=
   withOptions (fun o => (o.set `pp.maxDepth (10 : Nat)).set `pp.maxSteps (1500 : Nat)) do
@@ -56,38 +59,53 @@ partial def specializeExpr (e ty : Expr) (items : Array (String × Nat)) : M (Ex
 
 partial def expandExpr (e : Expr) (cfg : Config) (level : Nat := 0)
     (stack : Array Name := #[]) : M Expr := do
-  tick
   let e := e.consumeMData
-  if let .const n us := e.getAppFn then
-    let info ← getConstInfo n
-    let selected := cfg.expand.contains n.toString ||
-      (level < cfg.expandDepth && info.isTheorem)
-    if selected && !stack.contains n then
-      if let some v := info.value? (allowOpaque := true) then
-        -- Actual arguments retain their current expansion depth. Only entering
-        -- a declaration body consumes a level; beta substitution comes last.
-        let args ← e.getAppArgs.mapM fun a => expandExpr a cfg level stack
-        let body ← expandExpr (v.instantiateLevelParams info.levelParams us) cfg
-          (level+1) (stack.push n)
-        modify fun s => {s with expansions := s.expansions.push n.toString}
-        return body.beta args
-  match e with
-  | .lam n t b bi =>
-    withLocalDecl n bi t fun x => do
-      let b ← expandExpr (b.instantiate1 x) cfg level stack
-      mkLambdaFVars #[x] b
-  | .forallE n t b bi =>
-    withLocalDecl n bi t fun x => do
-      let b ← expandExpr (b.instantiate1 x) cfg level stack
-      mkForallFVars #[x] b
-  | .letE n t v b _ =>
-    let v ← expandExpr v cfg level stack
-    withLetDecl n t v fun x => do
-      let b ← expandExpr (b.instantiate1 x) cfg level stack
-      mkLambdaFVars #[x] b (usedLetOnly := false)
-  | .app f a => return mkApp (← expandExpr f cfg level stack) (← expandExpr a cfg level stack)
-  | .proj n i s => return .proj n i (← expandExpr s cfg level stack)
-  | _ => return e
+  -- Free-variable identities are structural key components. Reused results
+  -- therefore refer to the same locals; binders introduced here are abstracted.
+  let cacheable := !e.hasMVar && !e.hasLooseBVars
+  let key := (ExprStructEq.mk e, level, stack)
+  if cacheable then
+    if let some (value, history) := (← get).expansionCache[key]? then
+      modify fun s => {s with expansions := s.expansions ++ history}
+      return value
+  tick cfg.maxVisits
+  let firstExpansion := (← get).expansions.size
+  let value ← (do
+    if let .const n us := e.getAppFn then
+      let info ← getConstInfo n
+      let selected := cfg.expand.contains n.toString ||
+        (level < cfg.expandDepth && info.isTheorem)
+      if selected && !stack.contains n then
+        if let some v := info.value? (allowOpaque := true) then
+          -- Actual arguments retain their current expansion depth. Only entering
+          -- a declaration body consumes a level; beta substitution comes last.
+          let args ← e.getAppArgs.mapM fun a => expandExpr a cfg level stack
+          let body ← expandExpr (v.instantiateLevelParams info.levelParams us) cfg
+            (level+1) (stack.push n)
+          modify fun s => {s with expansions := s.expansions.push n.toString}
+          return body.beta args
+    match e with
+    | .lam n t b bi =>
+      withLocalDecl n bi t fun x => do
+        let b ← expandExpr (b.instantiate1 x) cfg level stack
+        mkLambdaFVars #[x] b
+    | .forallE n t b bi =>
+      withLocalDecl n bi t fun x => do
+        let b ← expandExpr (b.instantiate1 x) cfg level stack
+        mkForallFVars #[x] b
+    | .letE n t v b _ =>
+      let v ← expandExpr v cfg level stack
+      withLetDecl n t v fun x => do
+        let b ← expandExpr (b.instantiate1 x) cfg level stack
+        mkLambdaFVars #[x] b (usedLetOnly := false)
+    | .app f a => return mkApp (← expandExpr f cfg level stack) (← expandExpr a cfg level stack)
+    | .proj n i s => return .proj n i (← expandExpr s cfg level stack)
+    | _ => return e
+    : M Expr)
+  if cacheable then
+    let history := (← get).expansions.extract firstExpansion (← get).expansions.size
+    modify fun s => {s with expansionCache := s.expansionCache.insert key (value, history)}
+  return value
 
 def classify (e : Expr) : MetaM (String × String × Bool) := do
   match e with
