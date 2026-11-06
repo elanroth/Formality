@@ -31,7 +31,8 @@ Effective default command options: `maxRecDepth=2048`, `maxHeartbeats=8000000`.
 boolean, natural-number and string options. Source can contain its own
 `set_option`; the source bytes are part of the input identity. Default process
 timeout: 180 seconds (configurable 1–1800). The transformation visit budget is
-500,000. No randomness is introduced by this tool.
+500,000. The tree traversal introduces no randomness; run IDs are random and
+excluded from canonical tree identity.
 
 ## Transformation order
 

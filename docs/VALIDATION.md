@@ -31,7 +31,8 @@ Additional checks:
   `Diagonal.selfContradiction` expanded: 247 nodes, no truncation, no axioms.
   Inspected the browser rendering and reviewed public files for local paths.
 
-CI runs the same automated suites on Ubuntu with Python 3.10 and 3.13, Node 22,
+[The initial public CI run](https://github.com/elanroth/Formality/actions/runs/42264095007)
+passed both matrix jobs. CI runs the same automated suites on Ubuntu with Python 3.10 and 3.13, Node 22,
 and the pinned Lean toolchain, followed by wheel installation and API use
 outside the checkout. This is finite implementation evidence, not a theorem
 about all Lean programs or proof-tree correctness. The browser check is local;

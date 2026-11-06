@@ -1,5 +1,7 @@
 # Formality
 
+[![CI](https://github.com/elanroth/Formality/actions/workflows/ci.yml/badge.svg)](https://github.com/elanroth/Formality/actions/workflows/ci.yml)
+
 **See the shape of a Lean proof.**
 
 Formality turns Lean proof terms into colored inference bars on a white background:

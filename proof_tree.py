@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Source-checkout CLI; installable package entry point is lean-proof-tree."""
+"""Source-checkout CLI; installable package entry point is formality."""
 if __package__:
     from .api import *
 else:
