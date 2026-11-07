@@ -36,6 +36,10 @@ class ContractTests(unittest.TestCase):
         with self.assertRaisesRegex(contract.ContractError, "truncated"):
             contract.make_lock({**tree, "truncated": True})
 
+    def test_browser_provenance_is_not_a_native_lock(self):
+        with self.assertRaisesRegex(contract.ContractError, "Browser provenance"):
+            contract.make_lock({"contract": {"schema": "lean-proof-tree/browser-contract/v1"}})
+
     def test_profile_rejects_typos_and_resolves_source(self):
         request, drawing = contract.load_profile(ROOT/"examples/cantor.profile.json")
         self.assertIn("theorem cantor", request["source"])

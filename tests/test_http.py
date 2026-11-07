@@ -90,3 +90,24 @@ class HTTPTests(unittest.TestCase):
             status, _, body = self.post()
             self.assertEqual(status, 400)
             self.assertEqual(json.loads(body)['error'], 'invalid Lean proof')
+
+    def test_checked_example_is_available_without_running_lean(self):
+        with patch.object(api, 'extract') as extract:
+            status, _, body = self.request('/examples/diagonal.json')
+            self.assertEqual(status, 200)
+            tree = json.loads(body)
+            self.assertEqual(tree['declaration'], 'Diagonal.cantor')
+            self.assertTrue(tree['fixture']['checked'])
+            self.assertTrue(tree['kernelChecked'])
+            extract.assert_not_called()
+
+    def test_godel_example_can_open_without_foundation_installed(self):
+        status, _, body = self.request('/examples/godel-2.json')
+        self.assertEqual(status, 200)
+        tree = json.loads(body)
+        self.assertEqual(len(tree['nodes']), 19979)
+        self.assertFalse(tree['truncated'])
+
+    def test_example_route_only_serves_bundled_fixtures(self):
+        self.assertEqual(self.request('/examples/../../api.py')[0], 404)
+        self.assertEqual(self.request('/examples/not-present.json')[0], 404)

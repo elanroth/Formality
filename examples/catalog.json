@@ -4,35 +4,113 @@
     "title": "Cantor's diagonal theorem",
     "description": "A direct diagonal argument. Expand Diagonal.selfContradiction to open its final contradiction.",
     "file": "Diagonal.lean",
-    "request": {"declaration": "Diagonal.cantor", "mode": "raw", "modules": []}
+    "request": {
+      "declaration": "Diagonal.cantor",
+      "mode": "raw",
+      "modules": [],
+      "expand": [
+        "Diagonal.selfContradiction"
+      ]
+    },
+    "preset": "diagonal.json",
+    "featured": true,
+    "shortTitle": "Cantor's diagonal",
+    "subtitle": "A beautiful contradiction",
+    "icon": "diagonal",
+    "order": 0
   },
   {
     "id": "induction",
     "title": "Induction as a finite proof generator",
     "description": "Specialize n, then normalize to compute the Nat recursor. P, base and step remain premises.",
     "file": "Induction.lean",
-    "request": {"declaration": "Induction.iterate", "mode": "raw", "modules": []}
+    "request": {
+      "declaration": "Induction.iterate",
+      "mode": "compact",
+      "modules": [],
+      "specialize": [
+        [
+          "n",
+          20
+        ]
+      ],
+      "normalize": true
+    },
+    "preset": "induction.json",
+    "featured": true,
+    "shortTitle": "Induction",
+    "subtitle": "A little proof that grows",
+    "icon": "induction",
+    "order": 1
   },
   {
     "id": "zero-add",
     "title": "Zero plus n equals n",
     "description": "A tactic proof by induction. The step uses a separately expandable equality lemma.",
     "file": "Induction.lean",
-    "request": {"declaration": "Induction.zeroAdd", "mode": "raw", "modules": []}
+    "request": {
+      "declaration": "Induction.zeroAdd",
+      "mode": "raw",
+      "modules": []
+    }
+  },
+  {
+    "id": "godel",
+    "title": "Gödel's first incompleteness theorem",
+    "shortTitle": "Gödel I",
+    "subtitle": "An undecidable sentence",
+    "icon": "godel",
+    "featured": true,
+    "description": "Foundation's actual first incompleteness proof. Open lemma bodies to explore the diagonal argument and arithmetic representation.",
+    "foundationProject": true,
+    "preset": "godel-0.json",
+    "variants": {
+      "0": "godel-0.json",
+      "1": "godel-1.json",
+      "2": "godel-2.json"
+    },
+    "request": {
+      "source": "import Foundation.FirstOrder.Incompleteness.First\n\n-- A Δ₁-definable, Σ₁-sound extension of R₀ is incomplete.\n#check FFL.FirstOrder.Arithmetic.incomplete\n",
+      "declaration": "FFL.FirstOrder.Arithmetic.incomplete",
+      "mode": "compact",
+      "modules": [],
+      "maxNodes": 100000,
+      "maxDepth": 500,
+      "maxVisits": 5000000,
+      "timeoutSeconds": 600
+    },
+    "sourceUrl": "https://github.com/FormalizedFormalLogic/Foundation/blob/63bfd1b2e821dc2367b08f68d379303d08631f83/Foundation/FirstOrder/Incompleteness/First.lean",
+    "order": 3
   },
   {
     "id": "soundness",
     "title": "Hilbert calculus soundness",
     "description": "An actual soundness theorem for the K/S implicational calculus, by induction on derivations.",
     "file": "Soundness.lean",
-    "request": {"declaration": "Propositional.soundness", "mode": "raw", "modules": []}
+    "request": {
+      "declaration": "Propositional.soundness",
+      "mode": "raw",
+      "modules": []
+    },
+    "preset": "soundness.json",
+    "featured": true,
+    "shortTitle": "Soundness",
+    "subtitle": "Why the rules preserve truth",
+    "icon": "soundness",
+    "order": 2
   },
   {
     "id": "lawvere",
     "title": "Lawvere's fixed-point theorem (Types)",
     "description": "Mathlib's diagonal fixed-point argument; the helper used by Cantor's theorem.",
     "mathlibProject": true,
-    "request": {"declaration": "Function.exists_fixed_point_of_surjective", "mode": "raw", "modules": ["Mathlib.Logic.Function.Basic"]},
+    "request": {
+      "declaration": "Function.exists_fixed_point_of_surjective",
+      "mode": "raw",
+      "modules": [
+        "Mathlib.Logic.Function.Basic"
+      ]
+    },
     "sourceUrl": "https://github.com/leanprover-community/mathlib4/blob/389a421660f36801fe8278d8ab4275009b955a25/Mathlib/Logic/Function/Basic.lean"
   },
   {
@@ -40,7 +118,13 @@
     "title": "Cantor's theorem (Mathlib)",
     "description": "The imported Mathlib proof, via Lawvere's fixed-point argument. Try lemma expansion depth 1.",
     "mathlibProject": true,
-    "request": {"declaration": "Function.cantor_surjective", "mode": "raw", "modules": ["Mathlib.Logic.Function.Basic"]},
+    "request": {
+      "declaration": "Function.cantor_surjective",
+      "mode": "raw",
+      "modules": [
+        "Mathlib.Logic.Function.Basic"
+      ]
+    },
     "sourceUrl": "https://github.com/leanprover-community/mathlib4/blob/389a421660f36801fe8278d8ab4275009b955a25/Mathlib/Logic/Function/Basic.lean"
   },
   {
@@ -48,7 +132,13 @@
     "title": "First-order compactness (Mathlib)",
     "description": "The genuine ultraproduct proof: a theory has a model iff every finite subtheory has a model. Larger expansions expose its supporting lemmas.",
     "mathlibProject": true,
-    "request": {"declaration": "FirstOrder.Language.Theory.isSatisfiable_iff_isFinitelySatisfiable", "mode": "raw", "modules": ["Mathlib.ModelTheory.Satisfiability"]},
+    "request": {
+      "declaration": "FirstOrder.Language.Theory.isSatisfiable_iff_isFinitelySatisfiable",
+      "mode": "raw",
+      "modules": [
+        "Mathlib.ModelTheory.Satisfiability"
+      ]
+    },
     "sourceUrl": "https://github.com/leanprover-community/mathlib4/blob/389a421660f36801fe8278d8ab4275009b955a25/Mathlib/ModelTheory/Satisfiability.lean"
   }
 ]

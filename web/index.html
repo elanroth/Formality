@@ -1,37 +1,56 @@
 <!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Formality</title><link rel="stylesheet" href="/style.css"></head>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Formality — see the shape of a proof</title>
+  <meta name="description" content="Turn a Lean proof into a colored inference-bar tree. Explore Cantor, induction, and Gödel, then save your proof as an image.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
 <body>
-<header class="topbar"><div class="brand">Formality<span>Lean → inference bars</span></div><div class="local">Local · your Lean environment</div></header>
-<main>
-  <aside class="controls" aria-label="Proof input and expansion settings">
-    <label>Start with an example<select id="examples"><option value="">Choose a proof…</option></select></label>
-    <p id="example-note" class="muted"></p>
-    <label>Lean project folder <span class="optional">optional</span><input id="project" placeholder="/path/to/your/lean-project" autocomplete="off"></label>
-    <label>Import modules <span class="optional">comma separated</span><input id="modules" placeholder="Mathlib.ModelTheory.Satisfiability" autocomplete="off"></label>
-    <div class="source-heading"><label for="source">Lean source</label><label class="file-label" for="source-file">Open .lean file<input type="file" id="source-file" accept=".lean,text/plain" hidden></label></div>
-    <textarea id="source" spellcheck="false" aria-label="Lean source code" placeholder="Paste a full Lean file with a named theorem, or import its module above."></textarea>
-    <label>Declaration<input id="declaration" placeholder="Namespace.theoremName" autocomplete="off" spellcheck="false"></label>
-    <div class="two-fields"><label>Tree detail<select id="mode"><option value="raw">Full expression</option><option value="compact">Compact proof</option></select></label><label>Lemma expansion<select id="expand-depth"><option value="0">Selected lemmas only</option><option value="1">1 level of lemmas</option><option value="2">2 levels of lemmas</option><option value="3">3 levels of lemmas</option><option value="4">4 levels of lemmas</option></select></label></div>
-    <details id="unfold-options" open><summary>Specialize & unfold induction</summary><div class="two-fields"><label>Nat binder<input id="binder" value="n" placeholder="n" list="nat-binders" autocomplete="off"><datalist id="nat-binders"></datalist></label><label>Value <span class="optional">blank = general</span><input id="numeral" type="number" min="0" max="10000" placeholder="e.g. 20"></label></div><label class="check"><input id="normalize" type="checkbox">Compute concrete recursors</label><p class="hint">Specializes the named parameter, then reduces the resulting proof. Symbolic recursors and opaque lemma calls may remain.</p></details>
-    <details><summary>Selected lemma expansions <span id="selected-count"></span></summary><label>Available declarations<select id="references"><option value="">Generate a tree to list references</option></select></label><button id="add-reference" type="button" class="secondary">Add selected lemma</button><div id="selected-lemmas"></div><button id="clear-expansions" type="button" class="text-button">Collapse all lemmas</button></details>
-    <details><summary>Limits</summary><div class="two-fields"><label>Node budget<input id="max-nodes" type="number" min="100" max="100000" value="20000"></label><label>Depth budget<input id="max-depth" type="number" min="10" max="500" value="300"></label><label>Transformation budget<input id="max-visits" type="number" min="100" max="50000000" value="500000"></label><label>Time limit (seconds)<input id="timeout" type="number" min="1" max="1800" value="180"></label></div></details>
-    <button id="generate" class="primary" type="button">Generate tree</button>
-    <p id="status" role="status" aria-live="polite">Choose an example or enter your proof.</p>
-    <pre id="error" role="alert" hidden></pre>
-  </aside>
-  <section class="workspace" aria-label="Proof tree viewer">
-    <div class="viewer-heading"><div><h1 id="title">Your proof, as a shape.</h1><p id="meta" class="muted">Premises above. One conclusion below.</p></div><div class="export-actions"><button id="export-svg" disabled>Save SVG</button><button id="export-png" disabled>Save PNG</button><button id="export-json" disabled>Save JSON</button><label class="file-label secondary" for="json-file">Open JSON<input type="file" id="json-file" accept=".json,application/json" hidden></label></div></div>
-    <pre id="statement" class="statement"></pre>
-    <p id="axiom-summary" class="muted"></p>
-    <div id="truncation" role="status" hidden>Partial tree: red dashed bars mark omitted subtrees. Increase the limits for a complete export.</div>
-    <div id="canvas-wrap"><canvas id="tree" aria-label="Inference bars, widening toward the premises and narrowing to the conclusion" role="img"></canvas><div id="empty">Paste a Lean proof.<br><span>See its structure.</span></div><div class="view-tools"><button id="fit" disabled>Fit</button><button id="zoom-out" disabled aria-label="Zoom out">−</button><button id="zoom-in" disabled aria-label="Zoom in">+</button><span id="zoom-label">100%</span></div></div>
-    <div id="legend" aria-label="Rule colors"></div>
-    <div class="display-options"><label>Line weight<input type="range" id="line-weight" min=".5" max="4" value="1.5" step=".25"></label><p class="muted">Scroll to zoom · drag to pan · click a bar to inspect</p></div>
-    <details id="inspector"><summary>Inspect a line</summary><div class="inspect-head"><label>Expression node<select id="inspect-node"></select></label><button id="expand-node" disabled>Expand this declaration</button></div><pre id="node-content">Select a bar in the tree.</pre></details>
-    <details id="provenance"><summary>Proof & export record</summary><div id="record"></div></details>
-    <p class="scope">Typed proof-term structure. Compact mode omits type/data arguments. Typing and conversion derivations are not drawn.</p>
-  </section>
-</main>
-<script type="module" src="/app.mjs"></script>
-</body></html>
+  <header class="topbar wrap">
+    <a class="brand" href="/" aria-label="Formality home"><svg class="brand-mark" viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M3 5h24M6 11h18M9 17h12M12 23h6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span>Formality<span class="brand-period">.</span></span></a>
+    <nav aria-label="Main navigation"><a href="https://github.com/elanroth/Formality" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a><span class="engine-badge" id="engine-badge"><span class="status-dot"></span>Lean 4</span></nav>
+  </header>
+  <main class="wrap">
+    <section class="intro"><p class="eyebrow">A LITTLE PERSPECTIVE ON PROOF</p><h1>See the shape of a proof.</h1><p class="intro-copy">Paste Lean code. Explore the structure. Save something beautiful.</p></section>
+    <section class="examples-section" aria-label="Try a proof"><div class="section-caption"><span>Start with a little inspiration</span><span class="small-note">Real proofs. Ready to explore.</span></div><div id="example-cards" class="example-cards"></div></section>
+    <div class="studio">
+      <section class="editor-panel" aria-label="Lean proof editor">
+        <div class="panel-heading"><h2><span class="step">01</span>Your proof</h2><label class="file-label" for="source-file"><span aria-hidden="true">↥</span> Open .lean<input type="file" id="source-file" accept=".lean,text/plain" hidden></label></div>
+        <div class="editor-topline"><span><i class="code-dot"></i> proof.lean</span><span>Lean 4</span></div>
+        <div class="code-editor"><div id="line-numbers" aria-hidden="true">1</div><textarea id="source" spellcheck="false" aria-label="Lean source code" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="theorem identity (P : Prop) (p : P) : P := by\n  exact p"></textarea></div>
+        <div class="declaration-row"><label for="declaration">Theorem</label><input id="declaration" placeholder="Namespace.theoremName" autocomplete="off" spellcheck="false"><span id="detected-label" class="auto-label" hidden>auto</span></div>
+        <div class="primary-actions"><button id="generate" class="primary" type="button"><span class="button-label">Generate tree</span><span aria-hidden="true">↗</span></button><span class="keyboard-hint"><kbd>⌘</kbd> <kbd>↵</kbd></span></div>
+        <p id="status" role="status" aria-live="polite">Choose an example or paste a named Lean theorem.</p>
+        <pre id="error" role="alert" hidden></pre>
+        <details id="options" class="options"><summary>Options <span>Expansion, induction & more</span><span class="chevron" aria-hidden="true">⌄</span></summary>
+          <div class="options-body">
+            <div class="two-fields"><label>Tree detail<select id="mode"><option value="compact">Compact proof</option><option value="raw">Full expression</option></select></label><label>Open lemma bodies<select id="expand-depth"><option value="0">No extra levels</option><option value="1">1 level</option><option value="2">2 levels</option><option value="3">3 levels</option><option value="4">4 levels</option></select></label></div>
+            <details id="unfold-options"><summary>Unfold an induction</summary><div class="two-fields"><label>Natural-number parameter<input id="binder" value="n" placeholder="n" list="nat-binders" autocomplete="off"><datalist id="nat-binders"></datalist></label><label>Value<input id="numeral" type="number" min="0" max="10000" placeholder="Leave blank for general"></label></div><label class="check"><input id="normalize" type="checkbox">Compute the concrete instance</label><p class="hint">Set n to see a finite induction unfold. Other hypotheses remain premises.</p></details>
+            <details><summary>Choose specific lemmas <span id="selected-count"></span></summary><label>Referenced declaration<select id="references"><option value="">Generate a tree to list references</option></select></label><button id="add-reference" type="button" class="secondary">Expand selected lemma</button><div id="selected-lemmas"></div><button id="clear-expansions" type="button" class="text-button">Collapse all lemmas</button></details>
+            <details id="project-options"><summary>Use a Lean project</summary><label>Project folder<input id="project" placeholder="/path/to/your/lean-project" autocomplete="off"></label><label>Import modules<input id="modules" placeholder="e.g. Mathlib.Logic.Function.Basic" autocomplete="off"></label><p class="hint">Use the project's installed Lean version and libraries.</p></details>
+            <details><summary>Limits</summary><div class="two-fields"><label>Node budget<input id="max-nodes" type="number" min="100" max="100000" value="20000"></label><label>Depth budget<input id="max-depth" type="number" min="10" max="500" value="300"></label><label>Transformation budget<input id="max-visits" type="number" min="100" max="50000000" value="500000"></label><label>Time limit (seconds)<input id="timeout" type="number" min="1" max="1800" value="180"></label></div></details>
+            <label class="more-examples">More examples<select id="examples"><option value="">Choose a proof…</option></select></label><p id="example-note" class="hint"></p>
+          </div>
+        </details>
+        <p class="editor-footnote">Your code is checked by Lean before its tree is generated.</p>
+      </section>
+      <section class="viewer-panel" aria-label="Proof tree viewer">
+        <div class="panel-heading viewer-heading"><div><h2><span class="step">02</span>The view from here</h2></div><div class="export-actions"><button id="export-svg" class="quiet-button" disabled>SVG</button><button id="export-png" class="download-button" disabled><span aria-hidden="true">↓</span> Download PNG</button></div></div>
+        <div class="result-heading"><div><h3 id="title">Your proof, as a shape.</h3><p id="meta">Premises above. One conclusion below.</p></div><span id="result-state" class="result-state" hidden><span class="status-dot"></span><span id="result-state-text">Kernel checked</span></span></div>
+        <pre id="statement" class="statement"></pre><p id="axiom-summary" class="axiom-summary"></p>
+        <div id="truncation" role="status" hidden>Partial tree: red dashed bars mark omitted subtrees. Increase the limits for a complete export.</div>
+        <div id="example-variants" class="example-variants" role="group" aria-label="Gödel lemma expansion" hidden><span>Lemma layers</span><button type="button" data-depth="0" aria-pressed="true">0</button><button type="button" data-depth="1" aria-pressed="false">1</button><button type="button" data-depth="2" aria-pressed="false">2</button><small>Explore the checked examples</small></div><div id="canvas-wrap"><canvas id="tree" aria-label="Inference bars, widening toward the premises and narrowing to the conclusion" role="img"></canvas><div id="empty"><svg viewBox="0 0 120 100" fill="none" aria-hidden="true"><path d="M8 10h104M18 30h84M30 50h60M43 70h34M52 90h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>A proof has a shape.<br>Let's find yours.</span></div><div class="view-tools"><button id="fit" disabled>Fit</button><button id="zoom-out" disabled aria-label="Zoom out">−</button><button id="zoom-in" disabled aria-label="Zoom in">+</button><span id="zoom-label">100%</span></div><div id="loading" hidden role="status"><span class="spinner"></span><span id="loading-text">Checking & drawing your proof…</span></div></div>
+        <div class="figure-footer"><div id="legend" aria-label="Rule colors"></div><p class="gesture-hint">Scroll to zoom · drag to pan · select a bar to inspect</p></div>
+        <details class="appearance"><summary>Image settings</summary><div class="display-options"><label>Line weight<input type="range" id="line-weight" min=".5" max="4" value="1.5" step=".25"></label><button id="export-json" class="quiet-button" disabled>Save JSON</button><label class="file-label" for="json-file">Open JSON<input type="file" id="json-file" accept=".json,application/json" hidden></label></div></details>
+        <details id="inspector"><summary>Inspect a bar</summary><div class="inspect-head"><label>Expression node<select id="inspect-node"></select></label><button id="expand-node" disabled>Expand this declaration</button></div><pre id="node-content">Select a bar in the tree.</pre></details>
+        <details id="provenance"><summary>Proof & export record</summary><div id="record"></div></details>
+      </section>
+    </div>
+    <footer class="page-footer"><p>Logic, with a little room to breathe.</p><p>Typed expression trees. <a href="https://github.com/elanroth/Formality/blob/main/SPEC.md" target="_blank" rel="noopener">What am I looking at? ↗</a></p></footer>
+  </main>
+  <script type="module" src="/app.mjs"></script>
+</body>
+</html>

@@ -32,6 +32,7 @@ RUNS = Path(os.environ.get("FORMALITY_RUNS", os.environ.get("LEAN_PROOF_TREE_RUN
     ROOT / "runs" if (ROOT/"pyproject.toml").exists() else Path.home()/".cache/formality/runs"))))
 DEFAULT_VERSION = (ROOT / "lean-toolchain").read_text().strip()
 DEFAULT_MATHLIB = os.environ.get("FORMALITY_MATHLIB_PROJECT")
+DEFAULT_FOUNDATION = os.environ.get("FORMALITY_FOUNDATION_PROJECT")
 MAX_SOURCE = 512_000
 MAX_CONCURRENT = threading.BoundedSemaphore(2)
 
@@ -244,9 +245,10 @@ def examples():
     for item in data:
         if "file" in item:
             item["request"]["source"] = (ROOT / "examples" / item["file"]).read_text()
-        if item.pop("mathlibProject", False):
-            item["request"]["project"] = str(Path(DEFAULT_MATHLIB).expanduser().resolve()) if DEFAULT_MATHLIB else ""
-            item["available"] = bool(DEFAULT_MATHLIB and Path(DEFAULT_MATHLIB).expanduser().is_dir())
+        for flag, configured in [("mathlibProject", DEFAULT_MATHLIB), ("foundationProject", DEFAULT_FOUNDATION)]:
+            if item.pop(flag, False):
+                item["request"]["project"] = str(Path(configured).expanduser().resolve()) if configured else ""
+                item["available"] = bool(configured and Path(configured).expanduser().is_dir())
     return data
 
 
@@ -281,14 +283,23 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, {"token": self.server.token, "toolchain": DEFAULT_VERSION})
         if path == "/api/examples":
             return self.reply(200, examples())
-        if path.startswith("/api/result/"):
+        if path.startswith("/examples/"):
+            name = path.removeprefix("/examples/")
+            catalog = json.loads((ROOT / "examples/catalog.json").read_text())
+            allowed = {i["preset"] for i in catalog if "preset" in i}
+            allowed.update(v for i in catalog for v in i.get("variants", {}).values())
+            if name not in allowed:
+                return self.reply(404, {"error": "Not found."})
+            file = ROOT / "web/examples" / name
+        elif path.startswith("/api/result/"):
             run = path.removeprefix("/api/result/")
             if not re.fullmatch(r"[\w-]+", run):
                 return self.reply(400, {"error": "Invalid run ID."})
             file = RUNS / run / "tree.json"
         else:
             known = {"/": "index.html", "/app.mjs": "app.mjs", "/style.css": "style.css",
-                     "/layout.mjs": "layout.mjs"}
+                     "/layout.mjs": "layout.mjs", "/source.mjs": "source.mjs", "/service.mjs": "service.mjs",
+                     "/browser-engine.mjs": "browser-engine.mjs"}
             if path not in known:
                 return self.reply(404, {"error": "Not found."})
             file = ROOT / "web" / known[path]

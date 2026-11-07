@@ -1,6 +1,6 @@
 # Formality export specification, v1
 
-This document defines what the tool draws. Package version: **0.4.0**.
+This document defines what the tool draws. Package version: **0.5.0**.
 Changing these semantics requires a new specification identifier. A versioned
 specification supplies reproducible conventions; it does not identify all proofs
 of a theorem with one canonical mathematical proof.
@@ -198,3 +198,27 @@ options, rather than random run paths. SVG bytes can therefore be compared.
 SVG text uses system font families; actual glyph appearance and PNG bytes may
 vary with fonts, rasterizer/browser version, platform and pixel dimensions. The
 current contract does not claim pixel-identical PNGs across machines.
+
+## Static browser adapter
+
+The website uses the pinned WebAssembly Lean 4.33.0 runtime documented in
+`docs/website.md`. It wraps the same MetaM extractor in a `meta section`, imports
+`Lean.Meta.Reduce` for compile-time access, and calls it through built-in
+`run_elab`. It resolves source-private declaration aliases before extraction.
+The native CLI also resolves these aliases; imported and qualified names remain
+supported. Browser extraction omits native filesystem path discovery.
+
+`lean-expr/browser-raw/v1` and `lean-expr/browser-compact/v1` use the corresponding
+expression traversal above. Their preview printer uses `pp.maxSteps=1500` with
+the browser environment's other options; it trims previews to 2,200 Unicode code
+points in JavaScript. Unlike the native printer, it does not force a local
+`pp.maxDepth` option. This avoids a WebAssembly interpreter allocation failure.
+The module adapter and printer policy are included in the hashed driver.
+
+Browser JSON carries `lean-proof-tree/browser-contract/v1`: input/source hashes,
+options, tool/exporter hash, canonical tree hash, and an environment containing
+reported Lean version, compiler/runtime commits, and the deployed asset manifest
+hash. This records the declared pinned bundle, not observed native `.olean` paths
+or a native executable hash. The native lock API rejects browser provenance.
+Cached examples retain their original native extraction records and are visibly
+identified as checked examples; opening one does not rerun Lean.

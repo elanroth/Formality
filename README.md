@@ -20,6 +20,26 @@ Formality is experimental. It exports **typed expression trees**, not complete
 kernel typing or conversion derivations. See [the specification](SPEC.md) for the
 exact traversal and reproducibility contract.
 
+## Try it online
+
+Open **[Formality](https://elanroth.github.io/formality/)**. Paste a named Lean
+proof and select **Generate tree**, or start with Cantor's diagonal, concrete
+induction, soundness, or Foundation's actual Gödel theorem. Download a PNG or SVG.
+
+The website runs Lean locally in your browser; pasted source is not uploaded.
+Its pinned WebAssembly runtime reports Lean **4.33.0** (commit
+`62b6a2291302d4bbeace37642a066b7510d0145c`) and includes core libraries plus a
+Mathlib subset. The first run downloads compiler/library assets and needs a modern
+browser with shared WebAssembly memory. The native CLI pins **4.35.0** instead.
+Foundation is a saved, kernel-checked example on the website: its depth 0/1/2
+views contain 467 / 2,646 / 19,979 nodes. Regenerate it using the native CLI and
+its pinned Foundation project. Arbitrary third-party projects are not bundled
+with the website.
+
+Browser JSON records a separate `lean-proof-tree/browser-contract/v1` provenance
+record with source/exporter hashes and the pinned runtime asset manifest. It is
+not a native replay lock. See [the browser deployment guide](docs/website.md).
+
 ## Install
 
 Requires **Python 3.10+**, [Lean/elan](https://lean-lang.org/install/) on `PATH`,

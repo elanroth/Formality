@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.0
+
+- Add a simple purple editor and white inference-bar canvas, featured proof gallery,
+  theorem-name suggestions, one-click PNG export, and responsive layout.
+- Include checked Cantor, induction, soundness, and Foundation Gödel examples,
+  with three saved levels of actual lemma expansion.
+- Add a pinned browser Lean runtime and static GitHub Pages build, keeping code
+  execution on the visitor’s device and browser provenance distinct from native locks.
+- Split the Lean extraction API into smaller functions and resolve private names.
+
 ## 0.4.0 — 2026-11-06
 
 - Memoize lemma expansion by structural expression, dependency depth, and active

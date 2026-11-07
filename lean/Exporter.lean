@@ -205,50 +205,72 @@ def parameters (ty : Expr) : MetaM (Array Json) :=
     return Json.mkObj [("name", toJson decl.userName.toString),
       ("type", toJson (← shortPP decl.type)), ("isNat", toJson isNat)]
 
+def resolveDeclaration (name : Name) : MetaM Name := do
+  let env ← getEnv
+  let opts ← getOptions
+  return match ResolveName.resolveGlobalName env opts .anonymous [] name with
+    | (resolved, []) :: _ => resolved
+    | _ => name
+
+def exportJson (cfg : Config) (j : Json) (originalType ty : Expr)
+    (root : Nat) (axioms : Array Name) (s : Work) : MetaM Json := do
+  -- Keep pretty printing/JSON assembly outside StateRefT. This also avoids
+  -- excessive compiler recursion in the browser's Lean 4.33 runtime.
+  let statement ← shortPP originalType
+  let displayStatement ← shortPP ty
+  let params ← parameters originalType
+  let imports ← (← getEnv).header.moduleNames.mapM fun mod => do
+    let file ← liftM (findOLean mod)
+    return Json.mkObj [("module", toJson mod.toString), ("path", toJson file.toString)]
+  let identity := [
+    ("schema", toJson "proof-tree/v1"), ("declaration", toJson cfg.declaration),
+    ("statement", toJson statement), ("displayStatement", toJson displayStatement),
+    ("parameters", toJson params)]
+  let shape := [
+    ("root", toJson root), ("nodes", toJson s.nodes),
+    ("axioms", toJson (axioms.map Name.toString)),
+    ("references", toJson s.refs.toList.eraseDups.toArray),
+    ("expansions", toJson s.expansions), ("specialized", toJson s.applied)]
+  let status := [
+    ("truncated", toJson s.cut), ("kernelChecked", toJson true),
+    ("mode", toJson cfg.mode), ("config", j),
+    ("importedModules", toJson imports),
+    ("semantics", toJson "Typed expression tree. Compact mode groups applications and omits type/data arguments. Not a complete typing or conversion derivation.")]
+
+  return Json.mkObj (identity ++ shape ++ status)
+
+
 /-- Extract a declaration inside an existing Lean environment. The command below
 is an IO adapter; this MetaM API is also usable by other Lean metaprograms. -/
 def exportDeclaration (cfg : Config) (j : Json := Json.null) : MetaM Json := do
   if cfg.maxNodes < 10 then throwError "maxNodes must be at least 10"
   if cfg.mode != "raw" && cfg.mode != "compact" then throwError "Unknown tree mode: {cfg.mode}"
-  let n := cfg.declaration.toName
+  let n ← resolveDeclaration cfg.declaration.toName
+  let expanded ← cfg.expand.mapM fun name => do
+    return (← resolveDeclaration name.toName).toString
+  let cfg := {cfg with expand := expanded}
   let info ← getConstInfo n
   let some original := info.value? (allowOpaque := true) |
     throwError "{n} has no accessible proof body (it may be an axiom)."
   unless ← isProp info.type do
     throwError "{n} is not a proposition-valued proof declaration."
   let certificate ← mkFreshUserName `ProofTreeTool.checkedExport
-  let (result, _) ← (do
+  let ((ty, root, axioms), s) ← (do
       let (value, ty) ← specializeExpr original info.type cfg.specialize
       let value ← if cfg.expandDepth > 0 || !cfg.expand.isEmpty then expandExpr value cfg else pure value
       let value ← if cfg.normalize then
         withTransparency .all <| reduce value (explicitOnly := false) (skipTypes := true) (skipProofs := false)
         else pure value
-      -- The specialized/expanded/normalized expression receives a fresh kernel check.
       addDecl <| Declaration.thmDecl {
         name := certificate
         levelParams := info.levelParams
         type := ty
         value := value }
       let root ← tree value cfg
-      let s ← get
       let axioms ← collectAxioms certificate
-      let imports ← (← getEnv).header.moduleNames.mapM fun mod => do
-        let file ← liftM (findOLean mod)
-        return Json.mkObj [("module", toJson mod.toString), ("path", toJson file.toString)]
-      return Json.mkObj [
-        ("schema", toJson "proof-tree/v1"), ("declaration", toJson cfg.declaration),
-        ("statement", toJson (← shortPP info.type)), ("displayStatement", toJson (← shortPP ty)),
-        ("parameters", toJson (← parameters info.type)),
-        ("root", toJson root), ("nodes", toJson s.nodes),
-        ("axioms", toJson (axioms.map Name.toString)),
-        ("references", toJson s.refs.toList.eraseDups.toArray),
-        ("expansions", toJson s.expansions), ("specialized", toJson s.applied),
-        ("truncated", toJson s.cut), ("kernelChecked", toJson true),
-        ("mode", toJson cfg.mode), ("config", j),
-        ("importedModules", toJson imports),
-        ("semantics", toJson "Typed expression tree. Compact mode groups applications and omits type/data arguments. Not a complete typing or conversion derivation.")]
-      : M Json).run {}
-  return result
+      return (ty, root, axioms)
+      : M (Expr × Nat × Array Name)).run {}
+  exportJson cfg j info.type ty root axioms s
 
 elab "#proof_tree " config:str : command => do
   let j ← match Json.parse config.getString with

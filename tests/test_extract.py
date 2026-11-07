@@ -62,6 +62,12 @@ theorem joined (P : Prop) (p : P) : P := leftId P (rightId P p)
         with self.assertRaises(tool.ProofError):
             tool.extract(self.request("theorem invalid : False := by exact True.intro\n", "invalid"))
 
+    def test_private_declaration_resolution(self):
+        result = tool.extract(self.request("private theorem hidden (P : Prop) (p : P) : P := p\n", "hidden", mode="compact"))
+        self.assertTrue(result["kernelChecked"])
+        self.assertEqual(result["declaration"], "hidden")
+        self.assertEqual(len(result["nodes"]), 2)
+
     def test_unknown_binder_rejected(self):
         with self.assertRaisesRegex(tool.ProofError, "not found"):
             tool.extract(self.request("theorem t (n : Nat) : n = n := rfl\n", "t",

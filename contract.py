@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import subprocess
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 PROFILE_SCHEMA = "lean-proof-tree/profile/v1"
 LOCK_SCHEMA = "lean-proof-tree/lock/v1"
 SPEC = {"raw": "lean-expr/raw/v1", "compact": "lean-expr/compact/v1"}
@@ -118,6 +118,8 @@ def attach_contract(tree, request, environment):
 
 
 def make_lock(tree, drawing=None):
+    if tree.get("contract", {}).get("schema") == "lean-proof-tree/browser-contract/v1":
+        raise ContractError("Browser provenance is not a native replay lock. Re-extract with the CLI to create a native lock.")
     if tree["truncated"]:
         raise ContractError("Cannot lock a truncated tree. Increase the node/depth limits first.")
     drawing = drawing or {"profile": "inference-bars/v1"}
