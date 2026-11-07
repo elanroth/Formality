@@ -2,11 +2,19 @@
 
 The public interface is https://elanroth.github.io/formality/.
 
+The public deployment uses `--external-runtime`: it loads compiler/library bytes
+from the runtime repository's exact commit on `raw.githubusercontent.com`, while
+hosting the UI, checked examples, and hash manifest on GitHub Pages. No source code
+is sent to that host; execution stays in the local WebAssembly worker. This keeps
+the Pages artifact small; a deployment including all 534 MB of assets timed out
+while GitHub was syncing files. The default build below remains self-contained.
+
 The same `web/` files work with the Python local API or the static browser engine.
 `scripts/build-pages.mjs` selects the browser engine using a generated HTML meta
 tag and materializes the pinned compiler assets. It does not commit those assets
 to Formality. The personal Pages repository builds its existing homepage first,
-then adds this application under `build/formality/`.
+then adds this application under `build/formality/`. Add `--external-runtime` to use the public deployment
+layout instead of copying compiler/library bytes.
 
 ```sh
 git clone https://github.com/live-codes/browser-lean ../browser-lean
