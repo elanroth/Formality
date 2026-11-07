@@ -74,7 +74,7 @@ function showTree(tree){
   $('truncation').hidden=!tree.truncated;$('empty').hidden=true;
   for(const id of ['export-svg','export-png','export-json','fit','zoom-out','zoom-in'])$(id).disabled=false;
   const refs=$('references');refs.replaceChildren(new Option('Choose a declaration…',''));
-  for(const name of (tree.references||[]).sort())refs.append(new Option(name,name));
+  for(const name of [...(tree.references||[])].sort())refs.append(new Option(name,name));
   const nat=$('nat-binders');nat.replaceChildren();for(const p of tree.parameters||[])if(p.isNat)nat.append(new Option(p.name,p.name));
   const inspect=$('inspect-node');inspect.replaceChildren();
   // Large exports use the clickable canvas or numeric input instead of thousands
@@ -89,6 +89,9 @@ function showTree(tree){
     'Specialized parameters: '+((tree.specialized||[]).join(', ')||'none'),
     'Lemma bodies expanded: '+(tree.expansions?.length||0),
     'Limits: '+(tree.truncated?'reached; export is incomplete':'not reached'),
+    'Lean: '+(tree.provenance?.leanVersion||'unavailable'),
+    'Tree specification: '+(tree.contract?.treeSpecification||'unavailable'),
+    'Tree SHA-256: '+(tree.contract?.treeSha256||'unavailable'),
     'Run: '+(tree.provenance?.runId||'imported JSON'),
     'Driver SHA-256: '+(tree.provenance?.driverSha256||'unavailable'),tree.semantics]){const p=document.createElement('p');p.textContent=text;$('record').append(p);}
   legend();fit();
