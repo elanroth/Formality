@@ -2,6 +2,11 @@
 
 The public interface is https://elanroth.github.io/formality/.
 
+The Margin notes layout uses a paper-colored editor margin and a white proof
+figure. Featured examples are linked in the footer; expression detail and lemma
+depth stay beside the editor, with induction and other settings under Further
+options. All extraction and export behavior uses the existing tool APIs.
+
 The public deployment uses `--external-runtime`: it loads compiler/library bytes
 from the runtime repository's exact commit on `raw.githubusercontent.com`, while
 hosting the UI, checked examples, and hash manifest on GitHub Pages. No source code

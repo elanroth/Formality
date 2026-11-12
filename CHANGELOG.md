@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Apply the Margin notes interface: warm paper, plum ink, a serif heading, and
+  a white proof figure beside the editor.
+- Keep proof generation, lemma/induction options, color controls, inspection,
+  file import and PNG/SVG/JSON exports available in the notebook layout.
+- Move featured examples into simple page links and display the pinned browser
+  Lean version.
+
 ## 0.5.0
 
 - Add a simple purple editor and white inference-bar canvas, featured proof gallery,

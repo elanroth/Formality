@@ -3,29 +3,37 @@ import {declarationNames} from './source.mjs';
 import {getConfig,getCatalog,extractProof,getSavedRun} from './service.mjs';
 const $=id=>document.getElementById(id);
 const canvas=$('tree'),ctx=canvas.getContext('2d');
-const state={tree:null,layout:null,selected:null,expanded:new Set(),palette:{...defaultPalette},stroke:1.5,camera:{scale:1,x:0,y:0},token:null,catalog:[],busy:false,pointer:null,activeExample:null,manualName:false,selection:0,browser:false};
+const state={tree:null,layout:null,selected:null,expanded:new Set(),palette:{...defaultPalette,intro:'#755687',app:'#6d8b9e',constructor:'#6e8f81',recursor:'#b48b61',reference:'#88828f',hypothesis:'#aaa4af',type:'#d4cdd8',projection:'#a57c9e',let:'#6e8f81'},stroke:1.5,camera:{scale:1,x:0,y:0},token:null,catalog:[],busy:false,pointer:null,activeExample:null,manualName:false,selection:0,browser:false,uploadName:null};
 const fields=['project','modules','source','declaration','mode','expand-depth','binder','numeral','normalize','max-nodes','max-depth','max-visits','timeout'];
 function message(text){$('status').textContent=text;}
 function dirty(){
   if(!state.busy){state.selection++;$('loading').hidden=true;}
   $('example-variants').hidden=true;
-  if(!state.busy&&state.tree){message('Changes not generated · Generate to update the image.');$('result-state').classList.add('dirty');$('result-state-text').textContent='Changes not generated';}
+  if(!state.busy&&state.tree){message('Changes not drawn · Draw proof to update the figure.');$('result-state').classList.add('dirty');$('result-state-text').textContent='Changes not drawn';}
+}
+const notebookTitles={diagonal:'Cantor’s diagonal argument',induction:'Induction',soundness:'Propositional soundness',godel:'Gödel’s first incompleteness theorem'};
+function notebookHeading(declaration){
+  const item=state.catalog.find(x=>x.request.declaration===declaration);
+  $('page-title').textContent=item?(notebookTitles[item.id]||item.title):(declaration||'Your proof');
 }
 function sourceChanged(){
   const source=$('source'),names=declarationNames(source.value);
   $('line-numbers').textContent=Array.from({length:source.value.split('\n').length},(_,i)=>i+1).join('\n');
+  const lines=source.value?source.value.split('\n').length:0;$('source-lines').textContent=lines+' '+(lines===1?'line':'lines');
   if(!state.manualName&&names.length&&!names.includes($('declaration').value))$('declaration').value=names.at(-1);
   $('detected-label').hidden=state.manualName||!names.includes($('declaration').value);
   const previous=state.catalog.find(x=>x.id===state.activeExample);
   if(previous&&names.length&&!names.includes(previous.request.declaration)&&names.includes($('declaration').value)){
     state.activeExample=null;markExample(null);state.expanded.clear();showExpansions();$('numeral').value='';$('normalize').checked=false;
   }
+  $('source-filename').textContent=state.uploadName||state.catalog.find(x=>x.id===state.activeExample)?.file||'proof.lean';
+  notebookHeading($('declaration').value);
 }
 $('source').addEventListener('input',sourceChanged);
 $('source').addEventListener('paste',()=>{state.manualName=false;});
 $('source').addEventListener('scroll',()=>{$('line-numbers').scrollTop=$('source').scrollTop;});
 $('source').addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();e.target.setRangeText('  ',e.target.selectionStart,e.target.selectionEnd,'end');sourceChanged();dirty();}});
-$('declaration').addEventListener('input',()=>{state.manualName=true;$('detected-label').hidden=true;});
+$('declaration').addEventListener('input',()=>{state.manualName=true;$('detected-label').hidden=true;notebookHeading($('declaration').value);});
 window.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();generate();}});
 fields.forEach(id=>$(id).addEventListener('input',dirty));
 function readRequest(){
@@ -47,7 +55,7 @@ function busy(value){
   state.busy=value;
   for(const id of [...fields,'examples','source-file','references','add-reference','clear-expansions'])$(id).disabled=value;
   for(const b of document.querySelectorAll('#selected-lemmas button,#example-cards button,#example-variants button'))b.disabled=value;
-  $('generate').disabled=value;$('generate').querySelector('.button-label').textContent=value?'Generating…':'Generate tree';
+  $('generate').disabled=value;$('generate').querySelector('.button-label').textContent=value?'Drawing…':'Draw proof';
   $('loading-text').textContent='Checking & drawing your proof…';$('loading').hidden=!value;
   $('expand-node').disabled=value||!state.tree?.nodes[state.selected]?.expandable;
 }
@@ -65,7 +73,7 @@ async function generate(){
 function showTree(tree){
   const layout=layoutProof(tree); // Validate imported data before changing the visible result.
   state.tree=tree;state.layout=layout;state.selected=null;
-  $('title').textContent=tree.declaration;
+  $('title').textContent=tree.declaration;notebookHeading(tree.declaration);
   $('statement').textContent=tree.displayStatement||tree.statement;
   $('axiom-summary').textContent='Axioms: '+((tree.axioms||[]).join(', ')||'none');
   $('axiom-summary').style.color=(tree.axioms||[]).some(x=>x==='sorryAx')?'#c14443':'';
@@ -154,25 +162,19 @@ $('export-png').addEventListener('click',async()=>{
   const url=URL.createObjectURL(new Blob([exportSVG()],{type:'image/svg+xml'}));
   try{const img=new Image();img.src=url;await img.decode();const scale=Math.min(2,6000/img.width,6000/img.height),out=document.createElement('canvas');out.width=Math.min(6000,Math.ceil(img.width*scale));out.height=Math.min(6000,Math.ceil(img.height*scale));out.getContext('2d').drawImage(img,0,0,out.width,out.height);const blob=await new Promise(resolve=>out.toBlob(resolve,'image/png'));if(!blob)throw Error('PNG generation failed.');download(blob,'png');message(`PNG exported at ${out.width} × ${out.height}px. SVG retains full vector detail.`);}catch(error){message(error.message);}finally{URL.revokeObjectURL(url);}
 });
-$('source-file').addEventListener('change',async e=>{const file=e.target.files[0];if(file){$('source').value=await file.text();state.manualName=false;sourceChanged();dirty();}e.target.value='';});
+$('source-file').addEventListener('change',async e=>{const file=e.target.files[0];if(file){$('source').value=await file.text();state.uploadName=file.name;state.manualName=false;sourceChanged();dirty();}e.target.value='';});
 $('json-file').addEventListener('change',async e=>{
   try{const file=e.target.files[0];if(!file)return;const data=JSON.parse(await file.text());showTree(data);if(data.request)fillRequest(data.request);if(data.appearance){Object.assign(state.palette,data.appearance.palette||{});state.stroke=data.appearance.stroke||1.5;legend();paint();}message('Loaded saved tree. Generate to recheck or change its expansion.');}catch(error){message('Could not load JSON: '+error.message);}finally{e.target.value='';}
 });
-const icons={
-  diagonal:'<path d="M3 5h24M6 11h18M9 17h12M12 23h6"/>',
-  induction:'<path d="M4 23h6M10 17h8M16 11h10M21 5h5M7 21v-3M13 15v-3M19 9V6"/>',
-  soundness:'<path d="M3 5h9m6 0h9M5 11h7m6 0h7M8 17h14m-10 6h6"/>',
-  godel:'<path d="M3 15c0-8 9-8 12 0s12 8 12 0-9-8-12 0-12 8-12 0Z"/>'
-};
 function markExample(id){
   for(const button of $('example-cards').children)button.setAttribute('aria-pressed',String(button.dataset.id===id));
 }
 function renderCards(){
+  const labels={diagonal:'Cantor',induction:'Induction',soundness:'Soundness',godel:'Gödel I'};
   for(const item of state.catalog.filter(x=>x.featured).sort((a,b)=>(a.order||0)-(b.order||0))){
     const b=document.createElement('button');b.type='button';b.className='example-card';b.dataset.id=item.id;b.setAttribute('aria-pressed','false');
-    const icon=document.createElement('span');icon.className='example-icon';icon.innerHTML=`<svg viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">${icons[item.icon]||icons.diagonal}</svg>`;
-    const text=document.createElement('span');text.className='example-text';const title=document.createElement('b');title.textContent=item.shortTitle||item.title;const sub=document.createElement('small');sub.textContent=item.subtitle||'';text.append(title,sub);
-    const arrow=document.createElement('span');arrow.className='card-arrow';arrow.textContent='↗';arrow.setAttribute('aria-hidden','true');b.append(icon,text,arrow);b.addEventListener('click',()=>selectExample(item));$('example-cards').append(b);
+    b.textContent=labels[item.id]||item.shortTitle||item.title;
+    b.addEventListener('click',()=>selectExample(item));$('example-cards').append(b);
   }
 }
 async function loadPreset(item,depth=0){
@@ -184,23 +186,23 @@ async function loadPreset(item,depth=0){
     fillRequest({...item.request,...tree.request,project:item.request.project||'',expandDepth:item.variants?depth:tree.request.expandDepth||0});
     showTree(tree);$('example-variants').hidden=!item.variants;
     for(const b of $('example-variants').querySelectorAll('button'))b.setAttribute('aria-pressed',String(Number(b.dataset.depth)===depth));
-    message(state.browser&&item.id==='godel'?'Saved Foundation proof · explore its lemma layers or download the image. Use the CLI to regenerate this example.':item.available===false?'Saved, kernel-checked example · choose a project in Options to regenerate.':'Checked example loaded · edit the proof or download its image.');
+    message(state.browser&&item.id==='godel'?'Saved Foundation proof · explore its lemma layers or download the image. Use the CLI to regenerate this example.':item.available===false?'Saved, kernel-checked example · choose a project in Options to regenerate.':'Checked example loaded · edit the proof or save its figure.');
     localStorage.removeItem('proof-tree-last-run');history.replaceState(null,'','?example='+item.id+(depth?'&depth='+depth:''));
   }catch(error){if(selection===state.selection)message(error.message);}
   finally{if(selection===state.selection)$('loading').hidden=true;}
 }
 async function selectExample(item,depth=0){
-  if(state.busy)return;state.activeExample=item.id;markExample(item.id);$('examples').value=item.id;
+  if(state.busy)return;state.uploadName=null;state.activeExample=item.id;markExample(item.id);$('examples').value=item.id;
   fillRequest(item.request);$('example-note').textContent=item.description||'';$('error').hidden=true;
   if(item.id==='induction'){$('options').open=true;$('unfold-options').open=true;}
-  if(item.preset)await loadPreset(item,depth);else{$('example-variants').hidden=true;dirty();message('Example loaded · Generate to check it with Lean.');}
+  if(item.preset)await loadPreset(item,depth);else{$('example-variants').hidden=true;dirty();message('Example loaded · Draw proof to check it with Lean.');}
 }
 $('examples').addEventListener('change',e=>{const item=state.catalog.find(x=>x.id===e.target.value);if(item)selectExample(item);});
 for(const b of $('example-variants').querySelectorAll('button'))b.addEventListener('click',()=>{const item=state.catalog.find(x=>x.id===state.activeExample);if(item&&!state.busy)loadPreset(item,Number(b.dataset.depth));});
 
 async function init(){
   const [config,catalog]=await Promise.all([getConfig(),getCatalog()]);
-  state.token=config.token;state.catalog=catalog;state.browser=config.mode==='browser';$('project-options').hidden=state.browser;$('engine-badge').lastChild.textContent=state.browser?'Lean · in your browser':'Lean '+config.toolchain.split(':v').at(-1);
+  state.token=config.token;state.catalog=catalog;state.browser=config.mode==='browser';$('project-options').hidden=state.browser;$('engine-badge').lastChild.textContent=state.browser?'Lean '+(config.leanVersion||'4')+' · browser':'Lean '+config.toolchain.split(':v').at(-1);
   for(const item of catalog){const option=new Option(item.title,item.id);option.disabled=item.available===false&&!item.preset;$('examples').append(option);}
   renderCards();
   const params=new URLSearchParams(location.search),named=catalog.find(x=>x.id===params.get('example'));
@@ -211,5 +213,6 @@ async function init(){
 
 }
 window.formalityBeforeReload=()=>{if($('result-state').classList.contains('dirty'))sessionStorage.setItem('formality-coi-draft',JSON.stringify(readRequest()));};
-function restoreDraft(){const draft=sessionStorage.getItem('formality-coi-draft');if(draft){sessionStorage.removeItem('formality-coi-draft');try{state.activeExample=null;markExample(null);fillRequest(JSON.parse(draft));dirty();message('Your proof was kept while the browser compiler was prepared. Generate to continue.');}catch{}}}
+function restoreDraft(){const draft=sessionStorage.getItem('formality-coi-draft');if(draft){sessionStorage.removeItem('formality-coi-draft');try{state.activeExample=null;markExample(null);fillRequest(JSON.parse(draft));dirty();message('Your proof was kept while the browser compiler was prepared. Draw proof to continue.');}catch{}}}
+$('about-link').addEventListener('click',()=>{$('about').open=true;});
 init().then(restoreDraft).catch(error=>message('Could not connect to the Lean service: '+error.message));

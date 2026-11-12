@@ -24,7 +24,7 @@ for(const folder of ['lean-wasm','lean-lib','lean-mathlib'])await scan(path.join
 const manifest={runtimeRepository:'https://github.com/live-codes/browser-lean',runtimeCommit:pinned,leanCommit:'62b6a2291302d4bbeace37642a066b7510d0145c',files:hashes};
 const manifestBytes=JSON.stringify(manifest)+'\n';await fs.writeFile(path.join(assetBase,'manifest.json'),manifestBytes);
 await fs.copyFile(path.join(root,'web/examples/FOUNDATION-LICENSE.txt'),path.join(assetBase,'APACHE-2.0.txt'));
-const config={mode:'browser',toolVersion:'0.5.0',assetBase:external?`https://raw.githubusercontent.com/live-codes/browser-lean/${pinned}/public/`:'./lean-runtime/',runtimeCommit:pinned,leanCommit:manifest.leanCommit,assetManifestSha256:crypto.createHash('sha256').update(manifestBytes).digest('hex')};
+const config={mode:'browser',toolVersion:'0.5.0',leanVersion:'4.33.0',assetBase:external?`https://raw.githubusercontent.com/live-codes/browser-lean/${pinned}/public/`:'./lean-runtime/',runtimeCommit:pinned,leanCommit:manifest.leanCommit,assetManifestSha256:crypto.createHash('sha256').update(manifestBytes).digest('hex')};
 await fs.writeFile(path.join(output,'runtime-config.json'),JSON.stringify(config,null,2)+'\n');
 const catalog=JSON.parse(await fs.readFile(path.join(root,'examples/catalog.json'),'utf8'));
 for(const item of catalog){if(item.file)item.request.source=await fs.readFile(path.join(root,'examples',item.file),'utf8');item.request.project='';if(item.foundationProject)item.available=false;delete item.foundationProject;delete item.mathlibProject;}
