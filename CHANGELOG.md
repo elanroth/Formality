@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Declare a dedicated Formality favicon, touch icon, scoped app manifest and
+  link-preview metadata instead of inheriting domain branding.
+
 - Apply the Margin notes interface: warm paper, plum ink, a serif heading, and
   a white proof figure beside the editor.
 - Keep proof generation, lemma/induction options, color controls, inspection,

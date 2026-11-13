@@ -27,4 +27,4 @@ package-dir = {formality = ".", lean_proof_tree = "compat/lean_proof_tree"}
 include-package-data = false
 
 [tool.setuptools.package-data]
-formality = ["lean-toolchain", "lean/*.lean", "web/*.mjs", "web/*.css", "web/*.html", "web/examples/*.json", "web/examples/*.txt", "web/examples/*.md", "web/vendor/*.js", "web/vendor/*.txt", "web/vendor/*.md", "examples/*.lean", "examples/catalog.json", "examples/*.profile.json", "render.mjs", "SPEC.md"]
+formality = ["lean-toolchain", "lean/*.lean", "web/*.mjs", "web/*.css", "web/*.html", "web/*.webmanifest", "web/icons/*.svg", "web/icons/*.png", "web/icons/*.ico", "web/examples/*.json", "web/examples/*.txt", "web/examples/*.md", "web/vendor/*.js", "web/vendor/*.txt", "web/vendor/*.md", "examples/*.lean", "examples/catalog.json", "examples/*.profile.json", "render.mjs", "SPEC.md"]

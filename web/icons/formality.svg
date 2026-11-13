@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Formality</title>
+  <rect width="64" height="64" rx="10" fill="#755687"/>
+  <path d="M14 14h36M18 23h28M22 32h20M26 41h12M30 50h4" fill="none" stroke="#fbf9f4" stroke-width="4.5" stroke-linecap="round"/>
+</svg>

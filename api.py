@@ -299,14 +299,18 @@ class Handler(BaseHTTPRequestHandler):
         else:
             known = {"/": "index.html", "/app.mjs": "app.mjs", "/style.css": "style.css",
                      "/layout.mjs": "layout.mjs", "/source.mjs": "source.mjs", "/service.mjs": "service.mjs",
-                     "/browser-engine.mjs": "browser-engine.mjs"}
+                     "/browser-engine.mjs": "browser-engine.mjs", "/site.webmanifest": "site.webmanifest",
+                     **{f"/icons/{name}": f"icons/{name}" for name in ["formality.svg", "formality.ico",
+                       "formality-32.png", "formality-192.png", "formality-512.png", "apple-touch-icon.png", "preview.png"]}}
             if path not in known:
                 return self.reply(404, {"error": "Not found."})
             file = ROOT / "web" / known[path]
         if not file.exists():
             return self.reply(404, {"error": "Not found."})
         types = {".html": "text/html; charset=utf-8", ".mjs": "text/javascript; charset=utf-8",
-                 ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8"}
+                 ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8",
+                 ".webmanifest": "application/manifest+json", ".svg": "image/svg+xml",
+                 ".png": "image/png", ".ico": "image/vnd.microsoft.icon"}
         self.reply(200, file.read_bytes(), types[file.suffix])
 
     def do_POST(self):

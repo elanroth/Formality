@@ -60,6 +60,32 @@ class HTTPTests(unittest.TestCase):
         self.assertTrue(headers['Content-Type'].startswith('text/javascript'))
         self.assertIn(b'layoutProof', body)
 
+    def test_formality_icon_metadata_is_explicit(self):
+        status, _, body = self.request()
+        self.assertEqual(status, 200)
+        self.assertIn(b'href="./icons/formality.svg"', body)
+        self.assertIn(b'href="./site.webmanifest"', body)
+        self.assertIn(b'property="og:site_name" content="Formality"', body)
+        self.assertNotIn(b'songbook-icon', body)
+
+    def test_icon_assets_and_scoped_manifest_are_served(self):
+        for path, mime in [("/icons/formality.svg", "image/svg+xml"),
+                           ("/icons/formality.ico", "image/vnd.microsoft.icon"),
+                           ("/icons/formality-32.png", "image/png"),
+                           ("/icons/apple-touch-icon.png", "image/png")]:
+            with self.subTest(path=path):
+                status, headers, body = self.request(path)
+                self.assertEqual(status, 200)
+                self.assertEqual(headers['Content-Type'], mime)
+                self.assertNotIn(b'<!doctype html>', body)
+        status, headers, body = self.request('/site.webmanifest')
+        self.assertEqual(status, 200)
+        self.assertEqual(headers['Content-Type'], 'application/manifest+json')
+        manifest = json.loads(body)
+        self.assertEqual(manifest['name'], 'Formality')
+        self.assertEqual(manifest['scope'], './')
+        self.assertEqual(manifest['start_url'], './')
+
     def test_filesystem_traversal_is_not_served(self):
         self.assertEqual(self.request('/../api.py')[0], 404)
         self.assertEqual(self.request('/api/result/../../api.py')[0], 400)
